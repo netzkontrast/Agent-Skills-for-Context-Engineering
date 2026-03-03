@@ -1,17 +1,41 @@
 {
-  "name": "context-engineering-marketplace",
+  "name": "ai-workflow-architecture",
   "owner": {
     "name": "Muratcan Koylan",
     "email": "muratcan.koylan@outlook.com"
   },
   "metadata": {
-    "description": "Context Engineering skills for building production-grade AI agent systems",
-    "version": "1.0.0"
+    "description": "AI Workflow Architecture: context engineering knowledge base combined with a standardized, quality-gated multi-agent development pipeline. Includes the Cross-Skill Porter for Claude Code → Gemini CLI migration.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
+      "name": "workflow-execution-layer",
+      "description": "The operational backbone: L0-L3 agent hierarchy with pipeline orchestrator, story management, quality gatekeeper, and implementation workers. Implements the Universal Agent Workflow with Non-Commit Policy.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/pipeline-orchestrator",
+        "./skills/story-executor",
+        "./skills/task-reviewer",
+        "./skills/task-executor",
+        "./skills/task-rework",
+        "./skills/test-executor"
+      ]
+    },
+    {
+      "name": "cross-platform-migration",
+      "description": "Cross-platform skill portation tools. The cross-skill-porter automates Claude Code → Gemini CLI conversion with a non-destructive 5-phase pipeline (detection, extraction, permission inversion, path translation, validation). Universal agent workflow defines the binding standard for all skills.",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/cross-skill",
+        "./skills/universal-agent-workflow"
+      ]
+    },
+    {
       "name": "context-engineering-fundamentals",
-      "description": "Core context engineering skills covering fundamentals, degradation patterns, compression strategies, and optimization techniques for AI agent systems",
+      "description": "Core context engineering knowledge: context window anatomy, degradation patterns, compression strategies, and optimization techniques. Reference material consulted by executing agents during pipeline operations.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -22,8 +46,8 @@
       ]
     },
     {
-      "name": "agent-architecture",
-      "description": "Multi-agent patterns, memory systems, and tool design for building production AI agent architectures",
+      "name": "agent-architecture-patterns",
+      "description": "Multi-agent coordination patterns, memory system architectures, and tool design principles. Directly applicable to designing the L0-L3 workflow hierarchy and MCP integrations.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -34,7 +58,7 @@
     },
     {
       "name": "agent-evaluation",
-      "description": "Evaluation frameworks and LLM-as-judge techniques for testing and validating AI agent systems",
+      "description": "Evaluation frameworks including LLM-as-judge, multi-dimensional rubrics, pairwise comparison, and bias mitigation techniques. Applied by task-reviewer during quality gate validations.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -43,8 +67,8 @@
       ]
     },
     {
-      "name": "agent-development",
-      "description": "Project development methodology for LLM-powered applications including pipeline architecture and batch processing",
+      "name": "agent-development-methodology",
+      "description": "Project development methodology: task-model fit analysis, staged pipeline architecture, structured output design. Guides pipeline-orchestrator during project bootstrapping.",
       "source": "./",
       "strict": false,
       "skills": [
@@ -53,4 +77,3 @@
     }
   ]
 }
-

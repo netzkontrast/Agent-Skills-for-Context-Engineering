@@ -1,6 +1,7 @@
 ---
 name: context-compression
-description: This skill should be used when the user asks to "compress context", "summarize conversation history", "implement compaction", "reduce token usage", or mentions context compression, structured summarization, tokens-per-task optimization, or long-running agent sessions exceeding context limits.
+description: Reference knowledge skill with implementation patterns. Use when agent sessions exceed context limits, when implementing compaction strategies, or when optimizing tokens-per-task for long-running agents. Triggers on "compress context", "summarize conversation history", "implement compaction", "reduce token usage". Contains evaluation frameworks for measuring compression quality. Consulted by task-executor when working on agents with long context sessions.
+allowed-tools: Read Glob
 ---
 
 # Context Compression Strategies
@@ -256,10 +257,21 @@ External resources:
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-22
-**Last Updated**: 2025-12-26
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.1.0
+**Version**: 1.2.0
+**Level**: Reference (compression strategies and evaluation)
 

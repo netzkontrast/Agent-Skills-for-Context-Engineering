@@ -1,6 +1,7 @@
 ---
 name: project-development
-description: This skill should be used when the user asks to "start an LLM project", "design batch pipeline", "evaluate task-model fit", "structure agent project", or mentions pipeline architecture, agent-assisted development, cost estimation, or choosing between LLM and traditional approaches.
+description: Reference knowledge skill for LLM project methodology. Use when starting a new AI agent project, designing staged batch pipelines, evaluating task-model fit before committing to LLM automation, or structuring a project for production. Triggers on "start an LLM project", "design batch pipeline", "evaluate task-model fit", "structure agent project". Consulted by pipeline-orchestrator during project bootstrapping decisions.
+allowed-tools: Read Glob
 ---
 
 # Project Development Methodology
@@ -333,10 +334,22 @@ External resources:
 
 ---
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-25
-**Last Updated**: 2025-12-25
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (LLM project development methodology)
 

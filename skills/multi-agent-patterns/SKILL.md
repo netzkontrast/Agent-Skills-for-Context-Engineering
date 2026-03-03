@@ -1,6 +1,7 @@
 ---
 name: multi-agent-patterns
-description: This skill should be used when the user asks to "design multi-agent system", "implement supervisor pattern", "create swarm architecture", "coordinate multiple agents", or mentions multi-agent patterns, context isolation, agent handoffs, sub-agents, or parallel agent execution.
+description: Reference knowledge skill for multi-agent architectures. Use when designing supervisor/orchestrator hierarchies, implementing peer-to-peer swarm systems, or coordinating parallel agent execution with context isolation. Triggers on "design multi-agent system", "implement supervisor pattern", "create swarm architecture", "coordinate multiple agents". The L0-L3 hierarchy in this collection is a concrete application of the hierarchical multi-agent pattern described here.
+allowed-tools: Read Glob
 ---
 
 # Multi-Agent Architecture Patterns
@@ -247,9 +248,21 @@ External resources:
 
 ---
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-20
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (multi-agent coordination patterns)

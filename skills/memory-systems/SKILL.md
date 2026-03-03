@@ -1,6 +1,7 @@
 ---
 name: memory-systems
-description: This skill should be used when the user asks to "implement agent memory", "persist state across sessions", "build knowledge graph", "track entities", or mentions memory architecture, temporal knowledge graphs, vector stores, entity memory, or cross-session persistence.
+description: Reference knowledge skill for agent memory architectures. Use when designing persistent state across sessions, implementing temporal knowledge graphs, configuring vector stores for agent memory, or building entity tracking systems. Triggers on "implement agent memory", "persist state across sessions", "build knowledge graph", "track entities". The `kanban_board.md` pattern used by pipeline-orchestrator is an application of the scratchpad memory pattern described here.
+allowed-tools: Read Glob
 ---
 
 # Memory System Design
@@ -213,9 +214,21 @@ External resources:
 
 ---
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-20
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (memory architecture patterns)

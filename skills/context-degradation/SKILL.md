@@ -1,6 +1,7 @@
 ---
 name: context-degradation
-description: This skill should be used when the user asks to "diagnose context problems", "fix lost-in-middle issues", "debug agent failures", "understand context poisoning", or mentions context degradation, attention patterns, context clash, context confusion, or agent performance degradation. Provides patterns for recognizing and mitigating context failures.
+description: Reference knowledge skill. Use when diagnosing agent performance degradation, debugging lost-in-middle failures, understanding context poisoning or context clash, or designing systems resilient to long-context degradation. Triggers on "diagnose context problems", "fix lost-in-middle issues", "debug agent failures", "understand context poisoning". Consulted by pipeline-orchestrator when designing multi-agent isolation strategies.
+allowed-tools: Read Glob
 ---
 
 # Context Degradation Patterns
@@ -223,9 +224,20 @@ External resources:
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-20
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (context failure patterns)

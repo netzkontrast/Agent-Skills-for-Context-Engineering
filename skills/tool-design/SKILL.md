@@ -1,6 +1,7 @@
 ---
 name: tool-design
-description: This skill should be used when the user asks to "design agent tools", "create tool descriptions", "reduce tool complexity", "implement MCP tools", or mentions tool consolidation, architectural reduction, tool naming conventions, or agent-tool interfaces.
+description: Reference knowledge skill for tool design principles. Use when designing MCP tool interfaces, writing tool descriptions that guide agent behavior, applying the consolidation principle to reduce tool count, or defining tool naming conventions. Triggers on "design agent tools", "create tool descriptions", "implement MCP tools", "tool consolidation". Directly relevant to cross-skill-porter tool mapping and allowed-tools/excludeTools decisions.
+allowed-tools: Read Glob
 ---
 
 # Tool Design for Agents
@@ -303,9 +304,21 @@ External resources:
 
 ---
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-20
-**Last Updated**: 2025-12-23
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.1.0
+**Version**: 1.2.0
+**Level**: Reference (tool design and MCP integration patterns)
