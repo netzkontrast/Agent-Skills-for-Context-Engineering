@@ -7,6 +7,7 @@ description: >
   agent memory", "persist state across sessions", "build knowledge graph for agents",
   "track entities over time", "add long-term memory", "choose a memory framework",
   or mentions temporal knowledge graphs, vector stores, entity memory, adaptive memory, dynamic memory or memory benchmarks (LoCoMo, LongMemEval).
+allowed-tools: Read Glob
 ---
 
 # Memory System Design

@@ -1,6 +1,7 @@
 ---
 name: filesystem-context
 description: This skill should be used when the user asks to "offload context to files", "implement dynamic context discovery", "use filesystem for agent memory", "reduce context window bloat", or mentions file-based context management, tool output persistence, agent scratch pads, or just-in-time context loading.
+allowed-tools: Read Glob
 ---
 
 # Filesystem-Based Context Engineering
@@ -312,10 +313,21 @@ External resources:
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference
+- **Allowed tools**: Read, Glob
+- **Non-Commit Policy**: Not applicable (reference skill — read-only)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, search_file_content, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2026-01-07
-**Last Updated**: 2026-01-07
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference
 

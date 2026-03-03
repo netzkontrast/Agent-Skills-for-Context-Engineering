@@ -1,6 +1,7 @@
 ---
 name: bdi-mental-states
 description: This skill should be used when the user asks to "model agent mental states", "implement BDI architecture", "create belief-desire-intention models", "transform RDF to beliefs", "build cognitive agent", or mentions BDI ontology, mental state modeling, rational agency, or neuro-symbolic AI integration.
+allowed-tools: Read Glob
 ---
 
 # BDI Mental State Modeling
@@ -293,3 +294,21 @@ Primary sources:
 - Rao & Georgeff "BDI agents: From theory to practice" (1995)
 - Bratman "Intention, plans, and practical reason" (1987)
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference
+- **Allowed tools**: Read, Glob
+- **Non-Commit Policy**: Not applicable (reference skill — read-only)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, search_file_content, edit_notebook]`
+
+## Skill Metadata
+
+**Created**: 2025-12-20
+**Last Updated**: 2026-03-03
+**Author**: Agent Skills for Context Engineering Contributors
+**Version**: 1.1.0
+**Level**: Reference
