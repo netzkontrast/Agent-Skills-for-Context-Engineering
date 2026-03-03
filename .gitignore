@@ -60,3 +60,6 @@ Private/
 
 # Local history
 .specstory/
+skills/*/references/
+skills/*/scripts/
+skills/*/SKILL.md

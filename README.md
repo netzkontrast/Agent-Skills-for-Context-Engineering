@@ -210,6 +210,194 @@ npx ai-workflow-skills --all --local
 | `advanced-evaluation` | "implement LLM-as-judge", "compare model outputs", "mitigate bias" |
 | `project-development` | "start LLM project", "design batch pipeline", "evaluate task-model fit" |
 | `bdi-mental-states` | "model agent mental states", "implement BDI architecture", "transform RDF to beliefs", "build cognitive agent" |
+| `accessibility-tester` | Use this agent when you need comprehensive accessibility testing, WCAG compli... |
+| `ad-security-reviewer` | Use this agent when you need to audit Active Directory security posture, eval... |
+| `agent-installer` | Use this agent when the user wants to discover, browse, or install Claude Cod... |
+| `agent-organizer` | Use when assembling and optimizing multi-agent teams to execute complex proje... |
+| `ai-engineer` | Use this agent when architecting, implementing, or optimizing end-to-end AI s... |
+| `angular-architect` | Use when architecting enterprise Angular 15+ applications with complex state ... |
+| `api-design` | Agent skill |
+| `api-designer` | Use this agent when designing new APIs, creating API specifications, or refac... |
+| `api-documenter` | Use this agent when creating or improving API documentation, writing OpenAPI ... |
+| `architect-reviewer` | Use this agent when you need to evaluate system design decisions, architectur... |
+| `article-writing` | Agent skill |
+| `azure-infra-engineer` | Use when designing, deploying, or managing Azure infrastructure with focus on... |
+| `backend-developer` | Use this agent when building server-side APIs, microservices, and backend sys... |
+| `backend-patterns` | Agent skill |
+| `blockchain-developer` | Use this agent when building smart contracts, DApps, and blockchain protocols... |
+| `build-engineer` | Use this agent when you need to optimize build performance, reduce compilatio... |
+| `business-analyst` | Use when analyzing business processes, gathering requirements from stakeholde... |
+| `chaos-engineer` | Use this agent when you need to design and execute controlled failure experim... |
+| `cli-developer` | Use this agent when building command-line tools and terminal applications tha... |
+| `clickhouse-io` | Agent skill |
+| `cloud-architect` | Use this agent when you need to design, evaluate, or optimize cloud infrastru... |
+| `code-reviewer` | Use this agent when you need to conduct comprehensive code reviews focusing o... |
+| `coding-standards` | Agent skill |
+| `competitive-analyst` | Use when you need to analyze direct and indirect competitors, benchmark again... |
+| `compliance-auditor` | Use this agent when you need to achieve regulatory compliance, implement comp... |
+| `configure-ecc` | Agent skill |
+| `content-engine` | Agent skill |
+| `content-hash-cache-pattern` | Agent skill |
+| `content-marketer` | Use this agent when you need to develop comprehensive content strategies, cre... |
+| `context-manager` | Use for managing shared state, information retrieval, and data synchronizatio... |
+| `continuous-learning` | Agent skill |
+| `continuous-learning-v2` | Agent skill |
+| `cost-aware-llm-pipeline` | Agent skill |
+| `cpp-coding-standards` | Agent skill |
+| `cpp-pro` | Use this agent when building high-performance C++ systems requiring modern C+... |
+| `cpp-testing` | Agent skill |
+| `cross-skill` | Agent skill |
+| `csharp-developer` | Use this agent when building ASP.NET Core web APIs, cloud-native .NET solutio... |
+| `customer-success-manager` | Use this agent when you need to assess customer health, develop retention str... |
+| `data-analyst` | Use when you need to extract insights from business data, create dashboards a... |
+| `data-engineer` | Use this agent when you need to design, build, or optimize data pipelines, ET... |
+| `data-researcher` | Use this agent when you need to discover, collect, and validate data from mul... |
+| `data-scientist` | Use this agent when you need to analyze data patterns, build predictive model... |
+| `database-administrator` | Use this agent when optimizing database performance, implementing high-availa... |
+| `database-migrations` | Agent skill |
+| `database-optimizer` | Use this agent when you need to analyze slow queries, optimize database perfo... |
+| `debugger` | Use this agent when you need to diagnose and fix bugs, identify root causes o... |
+| `dependency-manager` | Use this agent when you need to audit dependencies for vulnerabilities, resol... |
+| `deployment-engineer` | Use this agent when designing, building, or optimizing CI/CD pipelines and de... |
+| `deployment-patterns` | Agent skill |
+| `devops-engineer` | Use this agent when building or optimizing infrastructure automation, CI/CD p... |
+| `devops-incident-responder` | Use when actively responding to production incidents, diagnosing critical ser... |
+| `django-developer` | Use when building Django 4+ web applications, REST APIs, or modernizing exist... |
+| `django-patterns` | Agent skill |
+| `django-security` | Agent skill |
+| `django-tdd` | Agent skill |
+| `django-verification` | Agent skill |
+| `docker-expert` | Use this agent when you need to build, optimize, or secure Docker container i... |
+| `docker-patterns` | Agent skill |
+| `documentation-engineer` | Use this agent when you need to create, architect, or overhaul comprehensive ... |
+| `dotnet-core-expert` | Use when building .NET Core applications requiring cloud-native architecture,... |
+| `dotnet-framework-4.8-expert` | Use this agent when working on legacy .NET Framework 4.8 enterprise applicati... |
+| `dx-optimizer` | Use this agent when optimizing the complete developer workflow including buil... |
+| `e2e-testing` | Agent skill |
+| `electron-pro` | Use this agent when building Electron desktop applications that require nativ... |
+| `elixir-expert` | Use this agent when you need to build fault-tolerant, concurrent systems leve... |
+| `embedded-systems` | Use when developing firmware for resource-constrained microcontrollers, imple... |
+| `error-coordinator` | Use this agent when distributed system errors occur and need coordinated hand... |
+| `error-detective` | Use this agent when you need to diagnose why errors are occurring in your sys... |
+| `eval-harness` | Agent skill |
+| `fintech-engineer` | Use when building payment systems, financial integrations, or compliance-heav... |
+| `flutter-expert` | Use when building cross-platform mobile applications with Flutter 3+ that req... |
+| `foundation-models-on-device` | Agent skill |
+| `frontend-developer` | Use when building complete frontend applications across React, Vue, and Angul... |
+| `frontend-patterns` | Agent skill |
+| `frontend-slides` | Agent skill |
+| `fullstack-developer` | Use this agent when you need to build complete features spanning database, AP... |
+| `game-developer` | Use this agent when implementing game systems, optimizing graphics rendering,... |
+| `git-workflow-manager` | Use this agent when you need to design, establish, or optimize Git workflows,... |
+| `golang-patterns` | Agent skill |
+| `golang-pro` | Use when building Go applications requiring concurrent programming, high-perf... |
+| `golang-testing` | Agent skill |
+| `graphql-architect` | Use this agent when designing or evolving GraphQL schemas across microservice... |
+| `incident-responder` | Use this agent when an active security breach, service outage, or operational... |
+| `investor-materials` | Agent skill |
+| `investor-outreach` | Agent skill |
+| `iot-engineer` | Use when designing and deploying IoT solutions requiring expertise in device ... |
+| `it-ops-orchestrator` | Use for orchestrating complex IT operations tasks that span multiple domains ... |
+| `iterative-retrieval` | Agent skill |
+| `java-architect` | Use this agent when designing enterprise Java architectures, migrating Spring... |
+| `java-coding-standards` | Agent skill |
+| `javascript-pro` | Use this agent when you need to build, optimize, or refactor modern JavaScrip... |
+| `jpa-patterns` | Agent skill |
+| `knowledge-synthesizer` | Use when you need to extract actionable patterns from agent interactions, syn... |
+| `kotlin-specialist` | Use when building Kotlin applications requiring advanced coroutine patterns, ... |
+| `kubernetes-specialist` | Use this agent when you need to design, deploy, configure, or troubleshoot Ku... |
+| `laravel-specialist` | Use when building Laravel 10+ applications, architecting Eloquent models with... |
+| `legacy-modernizer` | Use this agent when modernizing legacy systems that need incremental migratio... |
+| `legal-advisor` | Use this agent when you need to draft contracts, review compliance requiremen... |
+| `liquid-glass-design` | Agent skill |
+| `llm-architect` | Use when designing LLM systems for production, implementing fine-tuning or RA... |
+| `m365-admin` | Use when automating Microsoft 365 administrative tasks including Exchange Onl... |
+| `machine-learning-engineer` | Use this agent when you need to deploy, optimize, or serve machine learning m... |
+| `market-research` | Agent skill |
+| `market-researcher` | Use this agent when you need to analyze markets, understand consumer behavior... |
+| `mcp-developer` | Use this agent when you need to build, debug, or optimize Model Context Proto... |
+| `microservices-architect` | Use when designing distributed system architecture, decomposing monolithic ap... |
+| `ml-engineer` | Use this agent when building production ML systems requiring model training p... |
+| `mlops-engineer` | Use this agent when you need to design and implement ML infrastructure, set u... |
+| `mobile-app-developer` | Use this agent when developing iOS and Android mobile applications with focus... |
+| `mobile-developer` | Use this agent when building cross-platform mobile applications requiring nat... |
+| `multi-agent-coordinator` | Use when coordinating multiple concurrent agents that need to communicate, sh... |
+| `network-engineer` | Use this agent when designing, optimizing, or troubleshooting cloud and hybri... |
+| `nextjs-developer` | Use this agent when building production Next.js 14+ applications that require... |
+| `nlp-engineer` | Use when building production NLP systems, implementing text processing pipeli... |
+| `nutrient-document-processing` | Agent skill |
+| `payment-integration` | Use this agent when implementing payment systems, integrating payment gateway... |
+| `penetration-tester` | Use this agent when you need to conduct authorized security penetration tests... |
+| `performance-engineer` | Use this agent when you need to identify and eliminate performance bottleneck... |
+| `performance-monitor` | Use when establishing observability infrastructure to track system metrics, d... |
+| `php-pro` | Use this agent when working with PHP 8.3+ projects that require strict typing... |
+| `platform-engineer` | Use when building or improving internal developer platforms (IDPs), designing... |
+| `postgres-patterns` | Agent skill |
+| `postgres-pro` | Use when you need to optimize PostgreSQL performance, design high-availabilit... |
+| `powershell-5.1-expert` | Use when automating Windows infrastructure tasks requiring PowerShell 5.1 scr... |
+| `powershell-7-expert` | Use when building cross-platform cloud automation scripts, Azure infrastructu... |
+| `powershell-module-architect` | Use this agent when architecting and refactoring PowerShell modules, designin... |
+| `powershell-security-hardening` | Use this agent when you need to harden PowerShell automation, secure remoting... |
+| `powershell-ui-architect` | Use when designing or building desktop graphical interfaces (WinForms, WPF, M... |
+| `product-manager` | Use this agent when you need to make product strategy decisions, prioritize f... |
+| `project-guidelines-example` | Agent skill |
+| `project-manager` | Use this agent when you need to establish project plans, track execution prog... |
+| `prompt-engineer` | Use this agent when you need to design, optimize, test, or evaluate prompts f... |
+| `python-patterns` | Agent skill |
+| `python-pro` | Use this agent when you need to build type-safe, production-ready Python code... |
+| `python-testing` | Agent skill |
+| `qa-expert` | Use this agent when you need comprehensive quality assurance strategy, test p... |
+| `quant-analyst` | Use this agent when you need to develop quantitative trading strategies, buil... |
+| `rails-expert` | Use when building or modernizing Rails applications requiring full-stack deve... |
+| `react-specialist` | Use when optimizing existing React applications for performance, implementing... |
+| `refactoring-specialist` | Use when you need to transform poorly structured, complex, or duplicated code... |
+| `regex-vs-llm-structured-text` | Agent skill |
+| `research-analyst` | Use this agent when you need comprehensive research across multiple sources w... |
+| `risk-manager` | Use this agent when you need to identify, quantify, and mitigate enterprise-l... |
+| `rust-engineer` | Use when building Rust systems where memory safety, ownership patterns, zero-... |
+| `sales-engineer` | Use this agent when you need to conduct technical pre-sales activities includ... |
+| `scientific-literature-researcher` | Use when you need to search scientific literature and retrieve structured exp... |
+| `scrum-master` | Use when teams need facilitation, process optimization, velocity improvement,... |
+| `search-first` | Agent skill |
+| `search-specialist` | Use when you need to find specific information across multiple sources using ... |
+| `security-auditor` | Use this agent when conducting comprehensive security audits, compliance asse... |
+| `security-engineer` | Use this agent when implementing comprehensive security solutions across infr... |
+| `security-review` | Agent skill |
+| `security-scan` | Agent skill |
+| `seo-specialist` | Use this agent when you need comprehensive SEO optimization encompassing tech... |
+| `skill-stocktake` | Agent skill |
+| `slack-expert` | Use this agent when developing Slack applications, implementing Slack API int... |
+| `spring-boot-engineer` | Use this agent when building enterprise Spring Boot 3+ applications requiring... |
+| `springboot-patterns` | Agent skill |
+| `springboot-security` | Agent skill |
+| `springboot-tdd` | Agent skill |
+| `springboot-verification` | Agent skill |
+| `sql-pro` | Use this agent when you need to optimize complex SQL queries, design efficien... |
+| `sre-engineer` | Use this agent when you need to establish or improve system reliability throu... |
+| `strategic-compact` | Agent skill |
+| `swift-actor-persistence` | Agent skill |
+| `swift-concurrency-6-2` | Agent skill |
+| `swift-expert` | Use this agent when building native iOS, macOS, or server-side Swift applicat... |
+| `swift-protocol-di-testing` | Agent skill |
+| `swiftui-patterns` | Agent skill |
+| `task-distributor` | Use when distributing tasks across multiple agents or workers, managing queue... |
+| `tdd-workflow` | Agent skill |
+| `technical-writer` | Use this agent when you need to create, improve, or maintain technical docume... |
+| `terraform-engineer` | Use when building, refactoring, or scaling infrastructure as code using Terra... |
+| `terragrunt-expert` | Expert Terragrunt specialist mastering infrastructure orchestration, DRY conf... |
+| `test-automator` | Use this agent when you need to build, implement, or enhance automated test f... |
+| `tooling-engineer` | Use this agent when you need to build or enhance developer tools including CL... |
+| `trend-analyst` | Use when analyzing emerging patterns, predicting industry shifts, or developi... |
+| `typescript-pro` | Use when implementing TypeScript code requiring advanced type system patterns... |
+| `ui-designer` | Use this agent when designing visual interfaces, creating design systems, bui... |
+| `ux-researcher` | Use this agent when you need to conduct user research, analyze user behavior,... |
+| `verification-loop` | Agent skill |
+| `visa-doc-translate` | Agent skill |
+| `vue-expert` | Use this agent when building Vue 3 applications that require Composition API ... |
+| `websocket-engineer` | Use this agent when implementing real-time bidirectional communication featur... |
+| `windows-infra-admin` | Use when managing Windows Server infrastructure, Active Directory, DNS, DHCP,... |
+| `wordpress-master` | Use this agent when you need to architect, optimize, or troubleshoot WordPres... |
+| `workflow-orchestrator` | Use this agent when you need to design, implement, or optimize complex busine... |
 
 <img width="1014" height="894" alt="Screenshot 2025-12-26 at 12 34 47 PM" src="https://github.com/user-attachments/assets/f79aaf03-fd2d-4c71-a630-7027adeb9bfe" />
 ## Examples
