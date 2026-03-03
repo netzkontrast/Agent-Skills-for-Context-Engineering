@@ -1,0 +1,43 @@
+{
+  "name": "ai-workflow-skills",
+  "version": "2.0.0",
+  "description": "Context engineering knowledge base + standardized AI workflow architecture (L0-L3 hierarchy, Cross-Skill Porter, Universal Agent Workflow) for Claude Code and Gemini CLI.",
+  "bin": {
+    "ai-workflow-skills": "./bin/install.sh"
+  },
+  "scripts": {
+    "install:claude": "bash bin/install.sh --claude-local",
+    "install:claude-global": "bash bin/install.sh --claude-global",
+    "install:gemini": "bash bin/install.sh --gemini-local",
+    "install:all": "bash bin/install.sh --all"
+  },
+  "keywords": [
+    "claude-code",
+    "gemini-cli",
+    "agent-skills",
+    "context-engineering",
+    "ai-workflow",
+    "llm-agents",
+    "multi-agent",
+    "codex",
+    "opencode"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/netzkontrast/Agent-Skills-for-Context-Engineering"
+  },
+  "files": [
+    "bin/",
+    "commands/",
+    "skills/",
+    "template/",
+    "CLAUDE.md",
+    "SKILL.md",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

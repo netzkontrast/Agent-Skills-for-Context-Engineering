@@ -164,6 +164,16 @@ During review, if defects are found in code not related to the current story, do
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: L2 (Quality Gatekeeper)
+- **Allowed tools**: Read Write Glob Grep Bash TodoWrite
+- **Non-Commit Policy**: Not applicable — this skill is the exclusive commit authority
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [edit_file, web_fetch, web_search]`
+
 ## Skill Metadata
 
 **Created**: 2026-03-03

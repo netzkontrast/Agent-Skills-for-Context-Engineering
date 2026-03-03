@@ -137,6 +137,16 @@ This is the first skill that must be operational in any new environment. All oth
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: L0 (Meta-Orchestrator)
+- **Allowed tools**: Read Write Glob TodoWrite
+- **Non-Commit Policy**: Not applicable (this skill does not generate code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [edit_file, execute_script, web_fetch, web_search, search_file_content]`
+
 ## Skill Metadata
 
 **Created**: 2026-03-03

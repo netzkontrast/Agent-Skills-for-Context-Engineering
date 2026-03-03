@@ -174,9 +174,21 @@ Related skills:
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (cross-platform skill portation)
+- **Allowed tools**: Read Write Glob Bash
+- **Non-Commit Policy**: Enforced — never modifies source files; only writes to output directory
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [edit_file, web_fetch, web_search, write_todo, search_file_content]`
+
 ## Skill Metadata
 
 **Created**: 2026-03-03
 **Last Updated**: 2026-03-03
 **Author**: AI Workflow Architecture Initiative
 **Version**: 1.0.0
+
+**Level**: Reference (cross-platform skill portation)
