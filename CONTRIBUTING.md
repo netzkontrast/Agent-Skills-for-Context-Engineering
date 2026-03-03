@@ -117,3 +117,6 @@ This project follows a professional, technical collaboration model. Be respectfu
 
 For questions about contributing, please open an issue for discussion.
 
+
+
+*Note: For comprehensive documentation on the system architecture and workflow, please refer to [docs/architecture_and_usage.md](docs/architecture_and_usage.md).*
