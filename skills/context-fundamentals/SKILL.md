@@ -1,6 +1,7 @@
 ---
 name: context-fundamentals
-description: This skill should be used when the user asks to "understand context", "explain context windows", "design agent architecture", "debug context issues", "optimize context usage", or discusses context components, attention mechanics, progressive disclosure, or context budgeting. Provides foundational understanding of context engineering for AI agent systems.
+description: Reference knowledge skill. Use when building or debugging agent systems that require understanding of context windows, attention mechanics, progressive disclosure, or context budgeting. Triggers on "understand context", "explain context windows", "design agent architecture", "debug context issues", "optimize context usage". Foundational prerequisite for all other skills in this collection. Consulted by pipeline-orchestrator during architecture decisions and by task-reviewer during quality gate checks.
+allowed-tools: Read Glob
 ---
 
 # Context Engineering Fundamentals
@@ -177,9 +178,21 @@ External resources:
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (consulted by all levels; non-executing)
+- **Allowed tools**: Read, Glob — read-only; no filesystem modifications
+- **State tracking**: Not required (reference material, not an executing agent)
+- **Non-Commit Policy**: Not applicable (this skill produces no code)
+
+When ported to Gemini CLI via `cross-skill-porter`, the `allowed-tools` field maps to:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-20
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (foundational knowledge)

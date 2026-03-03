@@ -1,6 +1,7 @@
 ---
 name: context-optimization
-description: This skill should be used when the user asks to "optimize context", "reduce token costs", "improve context efficiency", "implement KV-cache optimization", "partition context", or mentions context limits, observation masking, context budgeting, or extending effective context capacity.
+description: Reference knowledge skill with techniques. Use when optimizing token efficiency, implementing KV-cache prefix caching, applying observation masking, or partitioning context across sub-agents. Triggers on "optimize context", "reduce token costs", "implement KV-cache optimization", "partition context". Contains actionable techniques for doubling effective context capacity. Consulted by task-executor when building agents with token-efficiency requirements.
+allowed-tools: Read Glob
 ---
 
 # Context Optimization Techniques
@@ -174,6 +175,17 @@ External resources:
 ## Skill Metadata
 
 **Created**: 2025-12-20
-**Last Updated**: 2025-12-20
+**Last Updated**: 2026-03-03
 **Author**: Agent Skills for Context Engineering Contributors
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (optimization techniques)
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`

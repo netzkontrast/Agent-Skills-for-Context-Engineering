@@ -203,6 +203,17 @@ External resources:
 
 ---
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2025-12-20

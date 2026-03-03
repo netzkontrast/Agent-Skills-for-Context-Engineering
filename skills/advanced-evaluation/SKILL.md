@@ -1,6 +1,7 @@
 ---
 name: advanced-evaluation
-description: This skill should be used when the user asks to "implement LLM-as-judge", "compare model outputs", "create evaluation rubrics", "mitigate evaluation bias", or mentions direct scoring, pairwise comparison, position bias, evaluation pipelines, or automated quality assessment.
+description: Advanced reference skill for LLM-as-judge implementation. Use when implementing pairwise comparison evaluation, mitigating position bias in automated assessments, building evaluation pipelines, or designing scalable quality assurance systems. Triggers on "implement LLM-as-judge", "compare model outputs", "mitigate evaluation bias", "automated quality assessment". Extends the evaluation skill with production-grade patterns.
+allowed-tools: Read Glob
 ---
 
 # Advanced Evaluation
@@ -445,10 +446,22 @@ Related skills in this collection:
 
 ---
 
+
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: Reference (non-executing knowledge skill)
+- **Allowed tools**: Read, Glob — read-only access only
+- **Non-Commit Policy**: Not applicable (produces no code)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [write_file, edit_file, execute_script, web_fetch, web_search, write_todo, edit_notebook]`
+
 ## Skill Metadata
 
 **Created**: 2024-12-24
-**Last Updated**: 2024-12-24
+**Last Updated**: 2026-03-03
 **Author**: Muratcan Koylan
-**Version**: 1.0.0
+**Version**: 1.1.0
+**Level**: Reference (advanced LLM evaluation patterns)
 
