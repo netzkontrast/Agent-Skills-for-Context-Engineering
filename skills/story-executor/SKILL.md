@@ -118,6 +118,16 @@ If the `kanban_board.md` becomes corrupted or unavailable:
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: L1 (Story Manager)
+- **Allowed tools**: Read Write Glob TodoWrite
+- **Non-Commit Policy**: Not applicable (this skill manages state, not code generation)
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [edit_file, execute_script, web_fetch, web_search, search_file_content]`
+
 ## Skill Metadata
 
 **Created**: 2026-03-03

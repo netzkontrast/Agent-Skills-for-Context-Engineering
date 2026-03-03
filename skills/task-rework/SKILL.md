@@ -114,6 +114,16 @@ This prevents infinite rework cycles that waste tokens and time.
 
 ---
 
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: L3 (Defect Repair Worker)
+- **Allowed tools**: Read Write Edit Glob Grep Bash TodoWrite
+- **Non-Commit Policy**: Enforced — this skill never runs git commit
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [web_fetch, web_search]`
+
 ## Skill Metadata
 
 **Created**: 2026-03-03

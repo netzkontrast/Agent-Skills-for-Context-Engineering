@@ -32,14 +32,55 @@ When adding new skills:
 4. Update the root README.md to include the new skill
 5. Ensure content is platform-agnostic (works across Cursor, Claude Code, etc.)
 
-## Skill Structure Requirements
+## Skill Structure Requirements (v2.0)
 
 Each skill must include:
 
-- YAML frontmatter with `name` and `description` fields
+- YAML frontmatter with `name`, `description`, **and `allowed-tools`** fields
 - Clear sections with logical organization
 - Practical examples where appropriate
 - Integration notes linking to related skills
+- `## Workflow Compliance` section (see template)
+- `## Skill Metadata` section with `**Level**:` field
+
+**Mandatory v2.0 frontmatter fields:**
+```yaml
+---
+name: skill-name
+description: >
+  Third-person trigger phrases. Starts with skill category
+  ("Reference knowledge skill" | "L3 implementation worker" | etc.)
+allowed-tools: Read Glob  # minimum for reference; expand for execution skills
+---
+```
+
+**Mandatory v2.0 `## Workflow Compliance` section** (insert before `## Skill Metadata`):
+```markdown
+## Workflow Compliance
+
+This skill conforms to the [universal-agent-workflow](../universal-agent-workflow/SKILL.md) standard:
+- **Level**: [L0 | L1 | L2 | L3 | Reference]
+- **Allowed tools**: [matches frontmatter]
+- **Non-Commit Policy**: [Enforced | Not applicable]
+
+When ported by `cross-skill-porter` to Gemini CLI:
+`excludeTools: [computed inverse of allowed-tools in snake_case]`
+```
+
+**Level classifications:**
+
+| Level | Examples | Code Access | Commit Access |
+|-------|----------|-------------|---------------|
+| L0 | pipeline-orchestrator | ✗ | ✗ |
+| L1 | story-executor | ✗ | ✗ |
+| L2 | task-reviewer | ✓ Read | ✓ Exclusive |
+| L3 | task-executor, task-rework, test-executor | ✓ Full | ✗ |
+| Reference | knowledge skills, cross-skill-porter | ✓ Read | ✗ |
+
+**Tool name mapping** (Claude PascalCase → Gemini snake_case for `excludeTools` computation):
+`Read→read_file`, `Write→write_file`, `Edit→edit_file`, `Grep→search_file_content`,
+`Glob→glob`, `Bash→execute_script`, `WebFetch→web_fetch`, `WebSearch→web_search`,
+`TodoWrite→write_todo`, `NotebookEdit→edit_notebook`
 
 Optional additions:
 
