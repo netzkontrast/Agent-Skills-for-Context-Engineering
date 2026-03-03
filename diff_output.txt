@@ -1,0 +1,2652 @@
+diff -r /tmp/everything-claude-code/skills/backend-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/backend-patterns/SKILL.md
+3a4
+> origin: ECC
+8a10,19
+>
+> ## When to Activate
+>
+> - Designing REST or GraphQL API endpoints
+> - Implementing repository, service, or controller layers
+> - Optimizing database queries (N+1, indexing, connection pooling)
+> - Adding caching (Redis, in-memory, HTTP cache headers)
+> - Setting up background jobs or async processing
+> - Structuring error handling and validation for APIs
+> - Building middleware (auth, logging, rate limiting)
+diff -r /tmp/everything-claude-code/skills/clickhouse-io/SKILL.md /tmp/affaan-everything-claude-code/skills/clickhouse-io/SKILL.md
+3a4
+> origin: ECC
+8a10,18
+>
+> ## When to Activate
+>
+> - Designing ClickHouse table schemas (MergeTree engine selection)
+> - Writing analytical queries (aggregations, window functions, joins)
+> - Optimizing query performance (partition pruning, projections, materialized views)
+> - Ingesting large volumes of data (batch inserts, Kafka integration)
+> - Migrating from PostgreSQL/MySQL to ClickHouse for analytics
+> - Implementing real-time dashboards or time-series analytics
+diff -r /tmp/everything-claude-code/skills/coding-standards/SKILL.md /tmp/affaan-everything-claude-code/skills/coding-standards/SKILL.md
+3a4
+> origin: ECC
+8a10,18
+>
+> ## When to Activate
+>
+> - Starting a new project or module
+> - Reviewing code for quality and maintainability
+> - Refactoring existing code to follow conventions
+> - Enforcing naming, formatting, or structural consistency
+> - Setting up linting, formatting, or type-checking rules
+> - Onboarding new contributors to coding conventions
+diff -r /tmp/everything-claude-code/skills/continuous-learning/SKILL.md /tmp/affaan-everything-claude-code/skills/continuous-learning/SKILL.md
+3a4
+> origin: ECC
+9a11,18
+> ## When to Activate
+>
+> - Setting up automatic pattern extraction from Claude Code sessions
+> - Configuring the Stop hook for session evaluation
+> - Reviewing or curating learned skills in `~/.claude/skills/learned/`
+> - Adjusting extraction thresholds or pattern categories
+> - Comparing v1 (this) vs v2 (instinct-based) approaches
+>
+86c95
+< ### vs Homunculus (github.com/humanplane/homunculus)
+---
+> ### vs Homunculus
+diff -r /tmp/everything-claude-code/skills/continuous-learning/evaluate-session.sh /tmp/affaan-everything-claude-code/skills/continuous-learning/evaluate-session.sh
+35,36c35,40
+<   MIN_SESSION_LENGTH=$(jq -r '.min_session_length // 10' "$CONFIG_FILE")
+<   LEARNED_SKILLS_PATH=$(jq -r '.learned_skills_path // "~/.claude/skills/learned/"' "$CONFIG_FILE" | sed "s|~|$HOME|")
+---
+>   if ! command -v jq &>/dev/null; then
+>     echo "[ContinuousLearning] jq is required to parse config.json but not installed, using defaults" >&2
+>   else
+>     MIN_SESSION_LENGTH=$(jq -r '.min_session_length // 10' "$CONFIG_FILE")
+>     LEARNED_SKILLS_PATH=$(jq -r '.learned_skills_path // "~/.claude/skills/learned/"' "$CONFIG_FILE" | sed "s|~|$HOME|")
+>   fi
+42,43c46,52
+< # Get transcript path from environment (set by Claude Code)
+< transcript_path="${CLAUDE_TRANSCRIPT_PATH:-}"
+---
+> # Get transcript path from stdin JSON (Claude Code hook input)
+> # Falls back to env var for backwards compatibility
+> stdin_data=$(cat)
+> transcript_path=$(echo "$stdin_data" | grep -o '"transcript_path":"[^"]*"' | head -1 | cut -d'"' -f4)
+> if [ -z "$transcript_path" ]; then
+>   transcript_path="${CLAUDE_TRANSCRIPT_PATH:-}"
+> fi
+diff -r /tmp/everything-claude-code/skills/continuous-learning-v2/SKILL.md /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/SKILL.md
+3,4c3,5
+< description: Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents.
+< version: 2.0.0
+---
+> description: Instinct-based learning system that observes sessions via hooks, creates atomic instincts with confidence scoring, and evolves them into skills/commands/agents. v2.1 adds project-scoped instincts to prevent cross-project contamination.
+> origin: ECC
+> version: 2.1.0
+7c8,9
+< # Continuous Learning v2 - Instinct-Based Architecture
+---
+> # Continuous Learning v2.1 - Instinct
+> -Based Architecture
+11c13,36
+< ## What's New in v2
+---
+> **v2.1** adds **project-scoped instincts** — React patterns stay in your React project, Python conventions stay in your Python project, and universal patterns (like "always validate input") are shared globally.
+>
+> ## When to Activate
+>
+> - Setting up automatic learning from Claude Code sessions
+> - Configuring instinct-based behavior extraction via hooks
+> - Tuning confidence thresholds for learned behaviors
+> - Reviewing, exporting, or importing instinct libraries
+> - Evolving instincts into full skills, commands, or agents
+> - Managing project-scoped vs global instincts
+> - Promoting instincts from project to global scope
+>
+> ## What's New in v2.1
+>
+> | Feature | v2.0 | v2.1 |
+> |---------|------|------|
+> | Storage | Global (~/.claude/homunculus/) | Project-scoped (projects/<hash>/) |
+> | Scope | All instincts apply everywhere | Project-scoped + global |
+> | Detection | None | git remote URL / repo path |
+> | Promotion | N/A | Project → global when seen in 2+ projects |
+> | Commands | 4 (status/evolve/export/import) | 6 (+promote/projects) |
+> | Cross-project | Contamination risk | Isolated by default |
+>
+> ## What's New in v2 (vs v1)
+19c44
+< | Evolution | Direct to skill | Instincts → cluster → skill/command/agent |
+---
+> | Evolution | Direct to skill | Instincts -> cluster -> skill/command/agent |
+32a58,60
+> scope: project
+> project_id: "a1b2c3d4e5f6"
+> project_name: "my-react-app"
+46,49c74,78
+< - **Atomic** — one trigger, one action
+< - **Confidence-weighted** — 0.3 = tentative, 0.9 = near certain
+< - **Domain-tagged** — code-style, testing, git, debugging, workflow, etc.
+< - **Evidence-backed** — tracks what observations created it
+---
+> - **Atomic** -- one trigger, one action
+> - **Confidence-weighted** -- 0.3 = tentative, 0.9 = near certain
+> - **Domain-tagged** -- code-style, testing, git, debugging, workflow, etc.
+> - **Evidence-backed** -- tracks what observations created it
+> - **Scope-aware** -- `project` (default) or `global`
+54,88c83,123
+< Session Activity
+<       │
+<       │ Hooks capture prompts + tool use (100% reliable)
+<       ▼
+< ┌─────────────────────────────────────────┐
+< │         observations.jsonl              │
+< │   (prompts, tool calls, outcomes)       │
+< └─────────────────────────────────────────┘
+<       │
+<       │ Observer agent reads (background, Haiku)
+<       ▼
+< ┌─────────────────────────────────────────┐
+< │          PATTERN DETECTION              │
+< │   • User corrections → instinct         │
+< │   • Error resolutions → instinct        │
+< │   • Repeated workflows → instinct       │
+< └─────────────────────────────────────────┘
+<       │
+<       │ Creates/updates
+<       ▼
+< ┌─────────────────────────────────────────┐
+< │         instincts/personal/             │
+< │   • prefer-functional.md (0.7)          │
+< │   • always-test-first.md (0.9)          │
+< │   • use-zod-validation.md (0.6)         │
+< └─────────────────────────────────────────┘
+<       │
+<       │ /evolve clusters
+<       ▼
+< ┌─────────────────────────────────────────┐
+< │              evolved/                   │
+< │   • commands/new-feature.md             │
+< │   • skills/testing-workflow.md          │
+< │   • agents/refactor-specialist.md       │
+< └─────────────────────────────────────────┘
+---
+> Session Activity (in a git repo)
+>       |
+>       | Hooks capture prompts + tool use (100% reliable)
+>       | + detect project context (git remote / repo path)
+>       v
+> +---------------------------------------------+
+> |  projects/<project-hash>/observations.jsonl  |
+> |   (prompts, tool calls, outcomes, project)   |
+> +---------------------------------------------+
+>       |
+>       | Observer agent reads (background, Haiku)
+>       v
+> +---------------------------------------------+
+> |          PATTERN DETECTION                   |
+> |   * User corrections -> instinct             |
+> |   * Error resolutions -> instinct            |
+> |   * Repeated workflows -> instinct           |
+> |   * Scope decision: project or global?       |
+> +---------------------------------------------+
+>       |
+>       | Creates/updates
+>       v
+> +---------------------------------------------+
+> |  projects/<project-hash>/instincts/personal/ |
+> |   * prefer-functional.yaml (0.7) [project]   |
+> |   * use-react-hooks.yaml (0.9) [project]     |
+> +---------------------------------------------+
+> |  instincts/personal/  (GLOBAL)               |
+> |   * always-validate-input.yaml (0.85) [global]|
+> |   * grep-before-edit.yaml (0.6) [global]     |
+> +---------------------------------------------+
+>       |
+>       | /evolve clusters + /promote
+>       v
+> +---------------------------------------------+
+> |  projects/<hash>/evolved/ (project-scoped)   |
+> |  evolved/ (global)                           |
+> |   * commands/new-feature.md                  |
+> |   * skills/testing-workflow.md               |
+> |   * agents/refactor-specialist.md            |
+> +---------------------------------------------+
+90a126,136
+> ## Project Detection
+>
+> The system automatically detects your current project:
+>
+> 1. **`CLAUDE_PROJECT_DIR` env var** (highest priority)
+> 2. **`git remote get-url origin`** -- hashed to create a portable project ID (same repo on different machines gets the same ID)
+> 3. **`git rev-parse --show-toplevel`** -- fallback using repo path (machine-specific)
+> 4. **Global fallback** -- if no project is detected, instincts go to global scope
+>
+> Each project gets a 12-character hash ID (e.g., `a1b2c3d4e5f6`). A registry file at `~/.claude/homunculus/projects.json` maps IDs to human-readable names.
+>
+106c152
+<         "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre"
+---
+>         "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh"
+113c159
+<         "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post"
+---
+>         "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh"
+129c175
+<         "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre"
+---
+>         "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh"
+136c182
+<         "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh post"
+---
+>         "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh"
+145c191
+< The Python CLI will create these automatically, but you can also create them manually:
+---
+> The system creates directories automatically on first use, but you can also create them manually:
+148,149c194,197
+< mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands}}
+< touch ~/.claude/homunculus/observations.jsonl
+---
+> # Global directories
+> mkdir -p ~/.claude/homunculus/{instincts/{personal,inherited},evolved/{agents,skills,commands},projects}
+>
+> # Project directories are auto-created when the hook first runs in a git repo
+155c203
+< /instinct-status     # Show learned instincts with confidence scores
+---
+> /instinct-status     # Show learned instincts (project + global)
+157c205
+< /instinct-export     # Export instincts for sharing
+---
+> /instinct-export     # Export instincts to file
+158a207,208
+> /promote             # Promote project instincts to global scope
+> /projects            # List all known projects and their instinct counts
+165,168c215,220
+< | `/instinct-status` | Show all learned instincts with confidence |
+< | `/evolve` | Cluster related instincts into skills/commands |
+< | `/instinct-export` | Export instincts for sharing |
+< | `/instinct-import <file>` | Import instincts from others |
+---
+> | `/instinct-status` | Show all instincts (project-scoped + global) with confidence |
+> | `/evolve` | Cluster related instincts into skills/commands, suggest promotions |
+> | `/instinct-export` | Export instincts (filterable by scope/domain) |
+> | `/instinct-import <file>` | Import instincts with scope control |
+> | `/promote [id]` | Promote project instincts to global scope |
+> | `/projects` | List all known projects and their instinct counts |
+172c224
+< Edit `config.json`:
+---
+> Edit `config.json` to control the background observer:
+176,189c228
+<   "version": "2.0",
+<   "observation": {
+<     "enabled": true,
+<     "store_path": "~/.claude/homunculus/observations.jsonl",
+<     "max_file_size_mb": 10,
+<     "archive_after_days": 7
+<   },
+<   "instincts": {
+<     "personal_path": "~/.claude/homunculus/instincts/personal/",
+<     "inherited_path": "~/.claude/homunculus/instincts/inherited/",
+<     "min_confidence": 0.3,
+<     "auto_approve_threshold": 0.7,
+<     "confidence_decay_rate": 0.05
+<   },
+---
+>   "version": "2.1",
+191,192c230
+<     "enabled": true,
+<     "model": "haiku",
+---
+>     "enabled": false,
+194,203c232
+<     "patterns_to_detect": [
+<       "user_corrections",
+<       "error_resolutions",
+<       "repeated_workflows",
+<       "tool_preferences"
+<     ]
+<   },
+<   "evolution": {
+<     "cluster_threshold": 3,
+<     "evolved_path": "~/.claude/homunculus/evolved/"
+---
+>     "min_observations_to_analyze": 20
+207a237,244
+> | Key | Default | Description |
+> |-----|---------|-------------|
+> | `observer.enabled` | `false` | Enable the background observer agent |
+> | `observer.run_interval_minutes` | `5` | How often the observer analyzes observations |
+> | `observer.min_observations_to_analyze` | `20` | Minimum observations before analysis runs |
+>
+> Other behavior (observation capture, instinct thresholds, project scoping, promotion criteria) is configured via code defaults in `instinct-cli.py` and `observe.sh`.
+>
+212,228c249,306
+< ├── identity.json           # Your profile, technical level
+< ├── observations.jsonl      # Current session observations
+< ├── observations.archive/   # Processed observations
+< ├── instincts/
+< │   ├── personal/           # Auto-learned instincts
+< │   └── inherited/          # Imported from others
+< └── evolved/
+<     ├── agents/             # Generated specialist agents
+<     ├── skills/             # Generated skills
+<     └── commands/           # Generated commands
+< ```
+<
+< ## Integration with Skill Creator
+<
+< When you use the [Skill Creator GitHub App](https://skill-creator.app), it now generates **both**:
+< - Traditional SKILL.md files (for backward compatibility)
+< - Instinct collections (for v2 learning system)
+---
+> +-- identity.json           # Your profile, technical level
+> +-- projects.json           # Registry: project hash -> name/path/remote
+> +-- observations.jsonl      # Global observations (fallback)
+> +-- instincts/
+> |   +-- personal/           # Global auto-learned instincts
+> |   +-- inherited/          # Global imported instincts
+> +-- evolved/
+> |   +-- agents/             # Global generated agents
+> |   +-- skills/             # Global generated skills
+> |   +-- commands/           # Global generated commands
+> +-- projects/
+>     +-- a1b2c3d4e5f6/       # Project hash (from git remote URL)
+>     |   +-- observations.jsonl
+>     |   +-- observations.archive/
+>     |   +-- instincts/
+>     |   |   +-- personal/   # Project-specific auto-learned
+>     |   |   +-- inherited/  # Project-specific imported
+>     |   +-- evolved/
+>     |       +-- skills/
+>     |       +-- commands/
+>     |       +-- agents/
+>     +-- f6e5d4c3b2a1/       # Another project
+>         +-- ...
+> ```
+>
+> ## Scope Decision Guide
+>
+> | Pattern Type | Scope | Examples |
+> |-------------|-------|---------|
+> | Language/framework conventions | **project** | "Use React hooks", "Follow Django REST patterns" |
+> | File structure preferences | **project** | "Tests in `__tests__`/", "Components in src/components/" |
+> | Code style | **project** | "Use functional style", "Prefer dataclasses" |
+> | Error handling strategies | **project** | "Use Result type for errors" |
+> | Security practices | **global** | "Validate user input", "Sanitize SQL" |
+> | General best practices | **global** | "Write tests first", "Always handle errors" |
+> | Tool workflow preferences | **global** | "Grep before Edit", "Read before Write" |
+> | Git practices | **global** | "Conventional commits", "Small focused commits" |
+>
+> ## Instinct Promotion (Project -> Global)
+>
+> When the same instinct appears in multiple projects with high confidence, it's a candidate for promotion to global scope.
+>
+> **Auto-promotion criteria:**
+> - Same instinct ID in 2+ projects
+> - Average confidence >= 0.8
+>
+> **How to promote:**
+>
+> ```bash
+> # Promote a specific instinct
+> python3 instinct-cli.py promote prefer-explicit-errors
+>
+> # Auto-promote all qualifying instincts
+> python3 instinct-cli.py promote
+>
+> # Preview without changes
+> python3 instinct-cli.py promote --dry-run
+> ```
+230c308
+< Instincts from repo analysis have `source: "repo-analysis"` and include the source repository URL.
+---
+> The `/evolve` command also suggests promotion candidates.
+255c333
+< > "v1 relied on skills to observe. Skills are probabilistic—they fire ~50-80% of the time based on Claude's judgment."
+---
+> > "v1 relied on skills to observe. Skills are probabilistic -- they fire ~50-80% of the time based on Claude's judgment."
+264,265c342,344
+< v2 is fully compatible with v1:
+< - Existing `~/.claude/skills/learned/` skills still work
+---
+> v2.1 is fully compatible with v2.0 and v1:
+> - Existing global instincts in `~/.claude/homunculus/instincts/` still work as global instincts
+> - Existing `~/.claude/skills/learned/` skills from v1 still work
+267c346
+< - Gradual migration path: run both in parallel
+---
+> - Gradual migration: run both in parallel
+272c351,352
+< - Only **instincts** (patterns) can be exported
+---
+> - Project-scoped instincts are isolated per project
+> - Only **instincts** (patterns) can be exported — not raw observations
+274c354
+< - You control what gets exported
+---
+> - You control what gets exported and promoted
+279c359
+< - [Homunculus](https://github.com/humanplane/homunculus) - Inspiration for v2 architecture
+---
+> - Homunculus - Community project that inspired the v2 instinct-based architecture (atomic observations, confidence scoring, instinct evolution pipeline)
+284c364
+< *Instinct-based learning: teaching Claude your patterns, one observation at a time.*
+---
+> *Instinct-based learning: teaching Claude your patterns, one project at a time.*
+diff -r /tmp/everything-claude-code/skills/continuous-learning-v2/agents/observer.md /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/agents/observer.md
+3c3
+< description: Background agent that analyzes session observations to detect patterns and create instincts. Uses Haiku for cost-efficiency.
+---
+> description: Background agent that analyzes session observations to detect patterns and create instincts. Uses Haiku for cost-efficiency. v2.1 adds project-scoped instincts.
+5d4
+< run_mode: background
+14,15c13
+< - After significant session activity (20+ tool calls)
+< - When user runs `/analyze-patterns`
+---
+> - After enough observations accumulate (configurable, default 20)
+17c15
+< - When triggered by observation hook (SIGUSR1)
+---
+> - When triggered on demand via SIGUSR1 to the observer process
+21c19,21
+< Reads observations from `~/.claude/homunculus/observations.jsonl`:
+---
+> Reads observations from the **project-scoped** observations file:
+> - Project: `~/.claude/homunculus/projects/<project-hash>/observations.jsonl`
+> - Global fallback: `~/.claude/homunculus/observations.jsonl`
+24,27c24,27
+< {"timestamp":"2025-01-22T10:30:00Z","event":"tool_start","session":"abc123","tool":"Edit","input":"..."}
+< {"timestamp":"2025-01-22T10:30:01Z","event":"tool_complete","session":"abc123","tool":"Edit","output":"..."}
+< {"timestamp":"2025-01-22T10:30:05Z","event":"tool_start","session":"abc123","tool":"Bash","input":"npm test"}
+< {"timestamp":"2025-01-22T10:30:10Z","event":"tool_complete","session":"abc123","tool":"Bash","output":"All tests pass"}
+---
+> {"timestamp":"2025-01-22T10:30:00Z","event":"tool_start","session":"abc123","tool":"Edit","input":"...","project_id":"a1b2c3d4e5f6","project_name":"my-react-app"}
+> {"timestamp":"2025-01-22T10:30:01Z","event":"tool_complete","session":"abc123","tool":"Edit","output":"...","project_id":"a1b2c3d4e5f6","project_name":"my-react-app"}
+> {"timestamp":"2025-01-22T10:30:05Z","event":"tool_start","session":"abc123","tool":"Bash","input":"npm test","project_id":"a1b2c3d4e5f6","project_name":"my-react-app"}
+> {"timestamp":"2025-01-22T10:30:10Z","event":"tool_complete","session":"abc123","tool":"Bash","output":"All tests pass","project_id":"a1b2c3d4e5f6","project_name":"my-react-app"}
+68c68,72
+< Creates/updates instincts in `~/.claude/homunculus/instincts/personal/`:
+---
+> Creates/updates instincts in the **project-scoped** instincts directory:
+> - Project: `~/.claude/homunculus/projects/<project-hash>/instincts/personal/`
+> - Global: `~/.claude/homunculus/instincts/personal/` (for universal patterns)
+>
+> ### Project-Scoped Instinct (default)
+72,73c76,77
+< id: prefer-grep-before-edit
+< trigger: "when searching for code to modify"
+---
+> id: use-react-hooks-pattern
+> trigger: "when creating React components"
+75c79
+< domain: "workflow"
+---
+> domain: "code-style"
+76a81,83
+> scope: project
+> project_id: "a1b2c3d4e5f6"
+> project_name: "my-react-app"
+79c86
+< # Prefer Grep Before Edit
+---
+> # Use React Hooks Pattern
+82c89
+< Always use Grep to find the exact location before using Edit.
+---
+> Always use functional components with hooks instead of class components.
+86c93
+< - Pattern: Grep → Read → Edit sequence
+---
+> - Pattern: All new components use useState/useEffect
+89a97,136
+> ### Global Instinct (universal patterns)
+>
+> ```yaml
+> ---
+> id: always-validate-user-input
+> trigger: "when handling user input"
+> confidence: 0.75
+> domain: "security"
+> source: "session-observation"
+> scope: global
+> ---
+>
+> # Always Validate User Input
+>
+> ## Action
+> Validate and sanitize all user input before processing.
+>
+> ## Evidence
+> - Observed across 3 different projects
+> - Pattern: User consistently adds input validation
+> - Last observed: 2025-01-22
+> ```
+>
+> ## Scope Decision Guide
+>
+> When creating instincts, determine scope based on these heuristics:
+>
+> | Pattern Type | Scope | Examples |
+> |-------------|-------|---------|
+> | Language/framework conventions | **project** | "Use React hooks", "Follow Django REST patterns" |
+> | File structure preferences | **project** | "Tests in `__tests__`/", "Components in src/components/" |
+> | Code style | **project** | "Use functional style", "Prefer dataclasses" |
+> | Error handling strategies | **project** (usually) | "Use Result type for errors" |
+> | Security practices | **global** | "Validate user input", "Sanitize SQL" |
+> | General best practices | **global** | "Write tests first", "Always handle errors" |
+> | Tool workflow preferences | **global** | "Grep before Edit", "Read before Write" |
+> | Git practices | **global** | "Conventional commits", "Small focused commits" |
+>
+> **When in doubt, default to `scope: project`** — it's safer to be project-specific and promote later than to contaminate the global space.
+>
+102a150,158
+> ## Instinct Promotion (Project → Global)
+>
+> An instinct should be promoted from project-scoped to global when:
+> 1. The **same pattern** (by id or similar trigger) exists in **2+ different projects**
+> 2. Each instance has confidence **>= 0.8**
+> 3. The domain is in the global-friendly list (security, general-best-practices, workflow)
+>
+> Promotion is handled by the `instinct-cli.py promote` command or the `/evolve` analysis.
+>
+109a166,167
+> 6. **Default to Project Scope**: Unless the pattern is clearly universal, make it project-scoped
+> 7. **Include Project Context**: Always set `project_id` and `project_name` for project-scoped instincts
+115,119c173,177
+< {"event":"tool_start","tool":"Grep","input":"pattern: useState"}
+< {"event":"tool_complete","tool":"Grep","output":"Found in 3 files"}
+< {"event":"tool_start","tool":"Read","input":"src/hooks/useAuth.ts"}
+< {"event":"tool_complete","tool":"Read","output":"[file content]"}
+< {"event":"tool_start","tool":"Edit","input":"src/hooks/useAuth.ts..."}
+---
+> {"event":"tool_start","tool":"Grep","input":"pattern: useState","project_id":"a1b2c3","project_name":"my-app"}
+> {"event":"tool_complete","tool":"Grep","output":"Found in 3 files","project_id":"a1b2c3","project_name":"my-app"}
+> {"event":"tool_start","tool":"Read","input":"src/hooks/useAuth.ts","project_id":"a1b2c3","project_name":"my-app"}
+> {"event":"tool_complete","tool":"Read","output":"[file content]","project_id":"a1b2c3","project_name":"my-app"}
+> {"event":"tool_start","tool":"Edit","input":"src/hooks/useAuth.ts...","project_id":"a1b2c3","project_name":"my-app"}
+124a183
+> - **Scope decision**: This is a general workflow pattern (not project-specific) → **global**
+129a189
+>   - scope: "global"
+135a196
+> - `scope: "project"` (since they come from a specific repo)
+diff -r /tmp/everything-claude-code/skills/continuous-learning-v2/agents/start-observer.sh /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/agents/start-observer.sh
+6a7,9
+> # v2.1: Project-scoped — detects current project and analyzes
+> #       project-specific observations into project-scoped instincts.
+> #
+8c11
+< #   start-observer.sh        # Start observer in background
+---
+> #   start-observer.sh        # Start observer for current project (or global)
+13a17,34
+> # NOTE: set -e is disabled inside the background subshell below
+> # to prevent claude CLI failures from killing the observer loop.
+>
+> # ─────────────────────────────────────────────
+> # Project detection
+> # ─────────────────────────────────────────────
+>
+> SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+> SKILL_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+>
+> # Source shared project detection helper
+> # This sets: PROJECT_ID, PROJECT_NAME, PROJECT_ROOT, PROJECT_DIR
+> source "${SKILL_ROOT}/scripts/detect-project.sh"
+>
+> # ─────────────────────────────────────────────
+> # Configuration
+> # ─────────────────────────────────────────────
+>
+15,17c36,72
+< PID_FILE="${CONFIG_DIR}/.observer.pid"
+< LOG_FILE="${CONFIG_DIR}/observer.log"
+< OBSERVATIONS_FILE="${CONFIG_DIR}/observations.jsonl"
+---
+> CONFIG_FILE="${SKILL_ROOT}/config.json"
+> # PID file is project-scoped so each project can have its own observer
+> PID_FILE="${PROJECT_DIR}/.observer.pid"
+> LOG_FILE="${PROJECT_DIR}/observer.log"
+> OBSERVATIONS_FILE="${PROJECT_DIR}/observations.jsonl"
+> INSTINCTS_DIR="${PROJECT_DIR}/instincts/personal"
+>
+> # Read config values from config.json
+> OBSERVER_INTERVAL_MINUTES=5
+> MIN_OBSERVATIONS=20
+> OBSERVER_ENABLED=false
+> if [ -f "$CONFIG_FILE" ]; then
+>   _config=$(CLV2_CONFIG="$CONFIG_FILE" python3 -c "
+> import json, os
+> with open(os.environ['CLV2_CONFIG']) as f:
+>     cfg = json.load(f)
+> obs = cfg.get('observer', {})
+> print(obs.get('run_interval_minutes', 5))
+> print(obs.get('min_observations_to_analyze', 20))
+> print(str(obs.get('enabled', False)).lower())
+> " 2>/dev/null || echo "5
+> 20
+> false")
+>   _interval=$(echo "$_config" | sed -n '1p')
+>   _min_obs=$(echo "$_config" | sed -n '2p')
+>   _enabled=$(echo "$_config" | sed -n '3p')
+>   if [ "$_interval" -gt 0 ] 2>/dev/null; then
+>     OBSERVER_INTERVAL_MINUTES="$_interval"
+>   fi
+>   if [ "$_min_obs" -gt 0 ] 2>/dev/null; then
+>     MIN_OBSERVATIONS="$_min_obs"
+>   fi
+>   if [ "$_enabled" = "true" ]; then
+>     OBSERVER_ENABLED=true
+>   fi
+> fi
+> OBSERVER_INTERVAL_SECONDS=$((OBSERVER_INTERVAL_MINUTES * 60))
+19c74,75
+< mkdir -p "$CONFIG_DIR"
+---
+> echo "Project: ${PROJECT_NAME} (${PROJECT_ID})"
+> echo "Storage: ${PROJECT_DIR}"
+26c82
+<         echo "Stopping observer (PID: $pid)..."
+---
+>         echo "Stopping observer for ${PROJECT_NAME} (PID: $pid)..."
+46a103,105
+>         # Also show instinct count
+>         instinct_count=$(find "$INSTINCTS_DIR" -name "*.yaml" 2>/dev/null | wc -l)
+>         echo "Instincts: $instinct_count"
+59a119,125
+>     # Check if observer is disabled in config
+>     if [ "$OBSERVER_ENABLED" != "true" ]; then
+>       echo "Observer is disabled in config.json (observer.enabled: false)."
+>       echo "Set observer.enabled to true in config.json to enable."
+>       exit 1
+>     fi
+>
+64c130
+<         echo "Observer already running (PID: $pid)"
+---
+>         echo "Observer already running for ${PROJECT_NAME} (PID: $pid)"
+70c136
+<     echo "Starting observer agent..."
+---
+>     echo "Starting observer agent for ${PROJECT_NAME}..."
+72,74c138,166
+<     # The observer loop
+<     (
+<       trap 'rm -f "$PID_FILE"; exit 0' TERM INT
+---
+>     # The observer loop — fully detached with nohup, IO redirected to log.
+>     # Variables passed safely via env to avoid shell injection from special chars in paths.
+>     nohup env \
+>       CONFIG_DIR="$CONFIG_DIR" \
+>       PID_FILE="$PID_FILE" \
+>       LOG_FILE="$LOG_FILE" \
+>       OBSERVATIONS_FILE="$OBSERVATIONS_FILE" \
+>       INSTINCTS_DIR="$INSTINCTS_DIR" \
+>       PROJECT_DIR="$PROJECT_DIR" \
+>       PROJECT_NAME="$PROJECT_NAME" \
+>       PROJECT_ID="$PROJECT_ID" \
+>       MIN_OBSERVATIONS="$MIN_OBSERVATIONS" \
+>       OBSERVER_INTERVAL_SECONDS="$OBSERVER_INTERVAL_SECONDS" \
+>       /bin/bash -c '
+>       set +e
+>       unset CLAUDECODE
+>
+>       SLEEP_PID=""
+>       USR1_FIRED=0
+>
+>       cleanup() {
+>         [ -n "$SLEEP_PID" ] && kill "$SLEEP_PID" 2>/dev/null
+>         # Only remove PID file if it still belongs to this process
+>         if [ -f "$PID_FILE" ] && [ "$(cat "$PID_FILE" 2>/dev/null)" = "$$" ]; then
+>           rm -f "$PID_FILE"
+>         fi
+>         exit 0
+>       }
+>       trap cleanup TERM INT
+77c169,171
+<         # Only analyze if we have enough observations
+---
+>         if [ ! -f "$OBSERVATIONS_FILE" ]; then
+>           return
+>         fi
+79c173
+<         if [ "$obs_count" -lt 10 ]; then
+---
+>         if [ "$obs_count" -lt "$MIN_OBSERVATIONS" ]; then
+83c177
+<         echo "[$(date)] Analyzing $obs_count observations..." >> "$LOG_FILE"
+---
+>         echo "[$(date)] Analyzing $obs_count observations for project ${PROJECT_NAME}..." >> "$LOG_FILE"
+86c180
+<         # This spawns a quick analysis session
+---
+>         # The prompt specifies project-scoped instinct creation
+87a182
+>           exit_code=0
+89,90c184,224
+<             "Read $OBSERVATIONS_FILE and identify patterns. If you find 3+ occurrences of the same pattern, create an instinct file in $CONFIG_DIR/instincts/personal/ following the format in the observer agent spec. Be conservative - only create instincts for clear patterns." \
+<             >> "$LOG_FILE" 2>&1 || true
+---
+>             "Read $OBSERVATIONS_FILE and identify patterns for the project '${PROJECT_NAME}' (user corrections, error resolutions, repeated workflows, tool preferences).
+> If you find 3+ occurrences of the same pattern, create an instinct file in $INSTINCTS_DIR/<id>.md.
+>
+> CRITICAL: Every instinct file MUST use this exact format:
+>
+> ---
+> id: kebab-case-name
+> trigger: \"when <specific condition>\"
+> confidence: <0.3-0.85 based on frequency: 3-5 times=0.5, 6-10=0.7, 11+=0.85>
+> domain: <one of: code-style, testing, git, debugging, workflow, file-patterns>
+> source: session-observation
+> scope: project
+> project_id: ${PROJECT_ID}
+> project_name: ${PROJECT_NAME}
+> ---
+>
+> # Title
+>
+> ## Action
+> <what to do, one clear sentence>
+>
+> ## Evidence
+> - Observed N times in session <id>
+> - Pattern: <description>
+> - Last observed: <date>
+>
+> Rules:
+> - Be conservative, only clear patterns with 3+ observations
+> - Use narrow, specific triggers
+> - Never include actual code snippets, only describe patterns
+> - If a similar instinct already exists in $INSTINCTS_DIR/, update it instead of creating a duplicate
+> - The YAML frontmatter (between --- markers) with id field is MANDATORY
+> - If a pattern seems universal (not project-specific), set scope to 'global' instead of 'project'
+> - Examples of global patterns: 'always validate user input', 'prefer explicit error handling'
+> - Examples of project patterns: 'use React functional components', 'follow Django REST framework conventions'" \
+>             >> "$LOG_FILE" 2>&1 || exit_code=$?
+>           if [ "$exit_code" -ne 0 ]; then
+>             echo "[$(date)] Claude analysis failed (exit $exit_code)" >> "$LOG_FILE"
+>           fi
+>         else
+>           echo "[$(date)] claude CLI not found, skipping analysis" >> "$LOG_FILE"
+93d226
+<         # Archive processed observations
+95c228
+<           archive_dir="${CONFIG_DIR}/observations.archive"
+---
+>           archive_dir="${PROJECT_DIR}/observations.archive"
+97,98c230
+<           mv "$OBSERVATIONS_FILE" "$archive_dir/processed-$(date +%Y%m%d-%H%M%S).jsonl"
+<           touch "$OBSERVATIONS_FILE"
+---
+>           mv "$OBSERVATIONS_FILE" "$archive_dir/processed-$(date +%Y%m%d-%H%M%S)-$$.jsonl" 2>/dev/null || true
+102,103c234,241
+<       # Handle SIGUSR1 for on-demand analysis
+<       trap 'analyze_observations' USR1
+---
+>       on_usr1() {
+>         # Kill pending sleep to avoid leak, then analyze
+>         [ -n "$SLEEP_PID" ] && kill "$SLEEP_PID" 2>/dev/null
+>         SLEEP_PID=""
+>         USR1_FIRED=1
+>         analyze_observations
+>       }
+>       trap on_usr1 USR1
+106c244
+<       echo "[$(date)] Observer started (PID: $$)" >> "$LOG_FILE"
+---
+>       echo "[$(date)] Observer started for ${PROJECT_NAME} (PID: $$)" >> "$LOG_FILE"
+109,112c247,258
+<         # Check every 5 minutes
+<         sleep 300
+<
+<         analyze_observations
+---
+>         # Interruptible sleep — allows USR1 trap to fire immediately
+>         sleep "$OBSERVER_INTERVAL_SECONDS" &
+>         SLEEP_PID=$!
+>         wait $SLEEP_PID 2>/dev/null
+>         SLEEP_PID=""
+>
+>         # Skip scheduled analysis if USR1 already ran it
+>         if [ "$USR1_FIRED" -eq 1 ]; then
+>           USR1_FIRED=0
+>         else
+>           analyze_observations
+>         fi
+114,116c260
+<     ) &
+<
+<     disown
+---
+>     ' >> "$LOG_FILE" 2>&1 &
+118,119c262,263
+<     # Wait a moment for PID file
+<     sleep 1
+---
+>     # Wait for PID file
+>     sleep 2
+122,123c266,273
+<       echo "Observer started (PID: $(cat "$PID_FILE"))"
+<       echo "Log: $LOG_FILE"
+---
+>       pid=$(cat "$PID_FILE")
+>       if kill -0 "$pid" 2>/dev/null; then
+>         echo "Observer started (PID: $pid)"
+>         echo "Log: $LOG_FILE"
+>       else
+>         echo "Failed to start observer (process died immediately, check $LOG_FILE)"
+>         exit 1
+>       fi
+diff -r /tmp/everything-claude-code/skills/continuous-learning-v2/config.json /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/config.json
+2,18c2
+<   "version": "2.0",
+<   "observation": {
+<     "enabled": true,
+<     "store_path": "~/.claude/homunculus/observations.jsonl",
+<     "max_file_size_mb": 10,
+<     "archive_after_days": 7,
+<     "capture_tools": ["Edit", "Write", "Bash", "Read", "Grep", "Glob"],
+<     "ignore_tools": ["TodoWrite"]
+<   },
+<   "instincts": {
+<     "personal_path": "~/.claude/homunculus/instincts/personal/",
+<     "inherited_path": "~/.claude/homunculus/instincts/inherited/",
+<     "min_confidence": 0.3,
+<     "auto_approve_threshold": 0.7,
+<     "confidence_decay_rate": 0.02,
+<     "max_instincts": 100
+<   },
+---
+>   "version": "2.1",
+21d4
+<     "model": "haiku",
+23,39c6
+<     "min_observations_to_analyze": 20,
+<     "patterns_to_detect": [
+<       "user_corrections",
+<       "error_resolutions",
+<       "repeated_workflows",
+<       "tool_preferences",
+<       "file_patterns"
+<     ]
+<   },
+<   "evolution": {
+<     "cluster_threshold": 3,
+<     "evolved_path": "~/.claude/homunculus/evolved/",
+<     "auto_evolve": false
+<   },
+<   "integration": {
+<     "skill_creator_api": "https://skill-creator.app/api",
+<     "backward_compatible_v1": true
+---
+>     "min_observations_to_analyze": 20
+diff -r /tmp/everything-claude-code/skills/continuous-learning-v2/hooks/observe.sh /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/hooks/observe.sh
+7c7,8
+< # Hook config (in ~/.claude/settings.json):
+---
+> # v2.1: Project-scoped observations — detects current project context
+> #       and writes observations to project-specific directory.
+9,35c10,11
+< # If installed as a plugin, use ${CLAUDE_PLUGIN_ROOT}:
+< # {
+< #   "hooks": {
+< #     "PreToolUse": [{
+< #       "matcher": "*",
+< #       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh pre" }]
+< #     }],
+< #     "PostToolUse": [{
+< #       "matcher": "*",
+< #       "hooks": [{ "type": "command", "command": "${CLAUDE_PLUGIN_ROOT}/skills/continuous-learning-v2/hooks/observe.sh post" }]
+< #     }]
+< #   }
+< # }
+< #
+< # If installed manually to ~/.claude/skills:
+< # {
+< #   "hooks": {
+< #     "PreToolUse": [{
+< #       "matcher": "*",
+< #       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh pre" }]
+< #     }],
+< #     "PostToolUse": [{
+< #       "matcher": "*",
+< #       "hooks": [{ "type": "command", "command": "~/.claude/skills/continuous-learning-v2/hooks/observe.sh post" }]
+< #     }]
+< #   }
+< # }
+---
+> # Registered via plugin hooks/hooks.json (auto-loaded when plugin is enabled).
+> # Can also be registered manually in ~/.claude/settings.json.
+39,41c15,16
+< CONFIG_DIR="${HOME}/.claude/homunculus"
+< OBSERVATIONS_FILE="${CONFIG_DIR}/observations.jsonl"
+< MAX_FILE_SIZE_MB=10
+---
+> # Hook phase from CLI argument: "pre" (PreToolUse) or "post" (PostToolUse)
+> HOOK_PHASE="${1:-post}"
+43,49c18,20
+< # Ensure directory exists
+< mkdir -p "$CONFIG_DIR"
+<
+< # Skip if disabled
+< if [ -f "$CONFIG_DIR/disabled" ]; then
+<   exit 0
+< fi
+---
+> # ─────────────────────────────────────────────
+> # Read stdin first (before project detection)
+> # ─────────────────────────────────────────────
+59,60c30,77
+< # Parse using python (more reliable than jq for complex JSON)
+< PARSED=$(python3 << EOF
+---
+> # ─────────────────────────────────────────────
+> # Extract cwd from stdin for project detection
+> # ─────────────────────────────────────────────
+>
+> # Extract cwd from the hook JSON to use for project detection.
+> # This avoids spawning a separate git subprocess when cwd is available.
+> STDIN_CWD=$(echo "$INPUT_JSON" | python3 -c '
+> import json, sys
+> try:
+>     data = json.load(sys.stdin)
+>     cwd = data.get("cwd", "")
+>     print(cwd)
+> except(KeyError, TypeError, ValueError):
+>     print("")
+> ' 2>/dev/null || echo "")
+>
+> # If cwd was provided in stdin, use it for project detection
+> if [ -n "$STDIN_CWD" ] && [ -d "$STDIN_CWD" ]; then
+>   export CLAUDE_PROJECT_DIR="$STDIN_CWD"
+> fi
+>
+> # ─────────────────────────────────────────────
+> # Project detection
+> # ─────────────────────────────────────────────
+>
+> SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+> SKILL_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+>
+> # Source shared project detection helper
+> # This sets: PROJECT_ID, PROJECT_NAME, PROJECT_ROOT, PROJECT_DIR
+> source "${SKILL_ROOT}/scripts/detect-project.sh"
+>
+> # ─────────────────────────────────────────────
+> # Configuration
+> # ─────────────────────────────────────────────
+>
+> CONFIG_DIR="${HOME}/.claude/homunculus"
+> OBSERVATIONS_FILE="${PROJECT_DIR}/observations.jsonl"
+> MAX_FILE_SIZE_MB=10
+>
+> # Skip if disabled
+> if [ -f "$CONFIG_DIR/disabled" ]; then
+>   exit 0
+> fi
+>
+> # Parse using python via stdin pipe (safe for all JSON payloads)
+> # Pass HOOK_PHASE via env var since Claude Code does not include hook type in stdin JSON
+> PARSED=$(echo "$INPUT_JSON" | HOOK_PHASE="$HOOK_PHASE" python3 -c '
+62a80
+> import os
+65c83,89
+<     data = json.loads('''$INPUT_JSON''')
+---
+>     data = json.load(sys.stdin)
+>
+>     # Determine event type from CLI argument passed via env var.
+>     # Claude Code does NOT include a "hook_type" field in the stdin JSON,
+>     # so we rely on the shell argument ("pre" or "post") instead.
+>     hook_phase = os.environ.get("HOOK_PHASE", "post")
+>     event = "tool_start" if hook_phase == "pre" else "tool_complete"
+68,72c92,97
+<     hook_type = data.get('hook_type', 'unknown')  # PreToolUse or PostToolUse
+<     tool_name = data.get('tool_name', data.get('tool', 'unknown'))
+<     tool_input = data.get('tool_input', data.get('input', {}))
+<     tool_output = data.get('tool_output', data.get('output', ''))
+<     session_id = data.get('session_id', 'unknown')
+---
+>     tool_name = data.get("tool_name", data.get("tool", "unknown"))
+>     tool_input = data.get("tool_input", data.get("input", {}))
+>     tool_output = data.get("tool_output", data.get("output", ""))
+>     session_id = data.get("session_id", "unknown")
+>     tool_use_id = data.get("tool_use_id", "")
+>     cwd = data.get("cwd", "")
+81c106
+<         tool_output_str = json.dumps(tool_output)[:5000]
+---
+>         tool_response_str = json.dumps(tool_output)[:5000]
+83,86c108
+<         tool_output_str = str(tool_output)[:5000]
+<
+<     # Determine event type
+<     event = 'tool_start' if 'Pre' in hook_type else 'tool_complete'
+---
+>         tool_response_str = str(tool_output)[:5000]
+89,94c111,118
+<         'parsed': True,
+<         'event': event,
+<         'tool': tool_name,
+<         'input': tool_input_str if event == 'tool_start' else None,
+<         'output': tool_output_str if event == 'tool_complete' else None,
+<         'session': session_id
+---
+>         "parsed": True,
+>         "event": event,
+>         "tool": tool_name,
+>         "input": tool_input_str if event == "tool_start" else None,
+>         "output": tool_response_str if event == "tool_complete" else None,
+>         "session": session_id,
+>         "tool_use_id": tool_use_id,
+>         "cwd": cwd
+97,99c121,122
+<     print(json.dumps({'parsed': False, 'error': str(e)}))
+< EOF
+< )
+---
+>     print(json.dumps({"parsed": False, "error": str(e)}))
+> ')
+102c125
+< PARSED_OK=$(echo "$PARSED" | python3 -c "import json,sys; print(json.load(sys.stdin).get('parsed', False))")
+---
+> PARSED_OK=$(echo "$PARSED" | python3 -c "import json,sys; print(json.load(sys.stdin).get('parsed', False))" 2>/dev/null || echo "False")
+107c130,135
+<   echo "{\"timestamp\":\"$timestamp\",\"event\":\"parse_error\",\"raw\":$(echo "$INPUT_JSON" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()[:1000]))')}" >> "$OBSERVATIONS_FILE"
+---
+>   export TIMESTAMP="$timestamp"
+>   echo "$INPUT_JSON" | python3 -c "
+> import json, sys, os
+> raw = sys.stdin.read()[:2000]
+> print(json.dumps({'timestamp': os.environ['TIMESTAMP'], 'event': 'parse_error', 'raw': raw}))
+> " >> "$OBSERVATIONS_FILE"
+111c139
+< # Archive if file too large
+---
+> # Archive if file too large (atomic: rename with unique suffix to avoid race)
+115c143
+<     archive_dir="${CONFIG_DIR}/observations.archive"
+---
+>     archive_dir="${PROJECT_DIR}/observations.archive"
+117c145
+<     mv "$OBSERVATIONS_FILE" "$archive_dir/observations-$(date +%Y%m%d-%H%M%S).jsonl"
+---
+>     mv "$OBSERVATIONS_FILE" "$archive_dir/observations-$(date +%Y%m%d-%H%M%S)-$$.jsonl" 2>/dev/null || true
+121c149
+< # Build and write observation
+---
+> # Build and write observation (now includes project context)
+124,125c152,154
+< python3 << EOF
+< import json
+---
+> export PROJECT_ID_ENV="$PROJECT_ID"
+> export PROJECT_NAME_ENV="$PROJECT_NAME"
+> export TIMESTAMP="$timestamp"
+127c156,159
+< parsed = json.loads('''$PARSED''')
+---
+> echo "$PARSED" | python3 -c "
+> import json, sys, os
+>
+> parsed = json.load(sys.stdin)
+129c161
+<     'timestamp': '$timestamp',
+---
+>     'timestamp': os.environ['TIMESTAMP'],
+132c164,166
+<     'session': parsed['session']
+---
+>     'session': parsed['session'],
+>     'project_id': os.environ.get('PROJECT_ID_ENV', 'global'),
+>     'project_name': os.environ.get('PROJECT_NAME_ENV', 'global')
+137c171
+< if parsed['output']:
+---
+> if parsed['output'] is not None:
+140,149c174,183
+< with open('$OBSERVATIONS_FILE', 'a') as f:
+<     f.write(json.dumps(observation) + '\n')
+< EOF
+<
+< # Signal observer if running
+< OBSERVER_PID_FILE="${CONFIG_DIR}/.observer.pid"
+< if [ -f "$OBSERVER_PID_FILE" ]; then
+<   observer_pid=$(cat "$OBSERVER_PID_FILE")
+<   if kill -0 "$observer_pid" 2>/dev/null; then
+<     kill -USR1 "$observer_pid" 2>/dev/null || true
+---
+> print(json.dumps(observation))
+> " >> "$OBSERVATIONS_FILE"
+>
+> # Signal observer if running (check both project-scoped and global observer)
+> for pid_file in "${PROJECT_DIR}/.observer.pid" "${CONFIG_DIR}/.observer.pid"; do
+>   if [ -f "$pid_file" ]; then
+>     observer_pid=$(cat "$pid_file")
+>     if kill -0 "$observer_pid" 2>/dev/null; then
+>       kill -USR1 "$observer_pid" 2>/dev/null || true
+>     fi
+151c185
+< fi
+---
+> done
+Only in /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/scripts: detect-project.sh
+diff -r /tmp/everything-claude-code/skills/continuous-learning-v2/scripts/instinct-cli.py /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/scripts/instinct-cli.py
+4a5,7
+> v2.1: Project-scoped instincts — different projects get different instincts,
+>       with global instincts applied universally.
+>
+6c9
+<   status   - Show all instincts and their status
+---
+>   status   - Show all instincts (project + global) and their status
+9a13,14
+>   promote  - Promote project instincts to global scope
+>   projects - List all known projects and their instinct counts
+13a19
+> import hashlib
+14a21
+> import subprocess
+19c26
+< from datetime import datetime
+---
+> from datetime import datetime, timezone
+28,36c35,216
+< INSTINCTS_DIR = HOMUNCULUS_DIR / "instincts"
+< PERSONAL_DIR = INSTINCTS_DIR / "personal"
+< INHERITED_DIR = INSTINCTS_DIR / "inherited"
+< EVOLVED_DIR = HOMUNCULUS_DIR / "evolved"
+< OBSERVATIONS_FILE = HOMUNCULUS_DIR / "observations.jsonl"
+<
+< # Ensure directories exist
+< for d in [PERSONAL_DIR, INHERITED_DIR, EVOLVED_DIR / "skills", EVOLVED_DIR / "commands", EVOLVED_DIR / "agents"]:
+<     d.mkdir(parents=True, exist_ok=True)
+---
+> PROJECTS_DIR = HOMUNCULUS_DIR / "projects"
+> REGISTRY_FILE = HOMUNCULUS_DIR / "projects.json"
+>
+> # Global (non-project-scoped) paths
+> GLOBAL_INSTINCTS_DIR = HOMUNCULUS_DIR / "instincts"
+> GLOBAL_PERSONAL_DIR = GLOBAL_INSTINCTS_DIR / "personal"
+> GLOBAL_INHERITED_DIR = GLOBAL_INSTINCTS_DIR / "inherited"
+> GLOBAL_EVOLVED_DIR = HOMUNCULUS_DIR / "evolved"
+> GLOBAL_OBSERVATIONS_FILE = HOMUNCULUS_DIR / "observations.jsonl"
+>
+> # Thresholds for auto-promotion
+> PROMOTE_CONFIDENCE_THRESHOLD = 0.8
+> PROMOTE_MIN_PROJECTS = 2
+> ALLOWED_INSTINCT_EXTENSIONS = (".yaml", ".yml", ".md")
+>
+> # Ensure global directories exist (deferred to avoid side effects at import time)
+> def _ensure_global_dirs():
+>     for d in [GLOBAL_PERSONAL_DIR, GLOBAL_INHERITED_DIR,
+>               GLOBAL_EVOLVED_DIR / "skills", GLOBAL_EVOLVED_DIR / "commands", GLOBAL_EVOLVED_DIR / "agents",
+>               PROJECTS_DIR]:
+>         d.mkdir(parents=True, exist_ok=True)
+>
+>
+> # ─────────────────────────────────────────────
+> # Path Validation
+> # ─────────────────────────────────────────────
+>
+> def _validate_file_path(path_str: str, must_exist: bool = False) -> Path:
+>     """Validate and resolve a file path, guarding against path traversal.
+>
+>     Raises ValueError if the path is invalid or suspicious.
+>     """
+>     path = Path(path_str).expanduser().resolve()
+>
+>     # Block paths that escape into system directories
+>     # We block specific system paths but allow temp dirs (/var/folders on macOS)
+>     blocked_prefixes = [
+>         "/etc", "/usr", "/bin", "/sbin", "/proc", "/sys",
+>         "/var/log", "/var/run", "/var/lib", "/var/spool",
+>         # macOS resolves /etc → /private/etc
+>         "/private/etc",
+>         "/private/var/log", "/private/var/run", "/private/var/db",
+>     ]
+>     path_s = str(path)
+>     for prefix in blocked_prefixes:
+>         if path_s.startswith(prefix + "/") or path_s == prefix:
+>             raise ValueError(f"Path '{path}' targets a system directory")
+>
+>     if must_exist and not path.exists():
+>         raise ValueError(f"Path does not exist: {path}")
+>
+>     return path
+>
+>
+> def _validate_instinct_id(instinct_id: str) -> bool:
+>     """Validate instinct IDs before using them in filenames."""
+>     if not instinct_id or len(instinct_id) > 128:
+>         return False
+>     if "/" in instinct_id or "\\" in instinct_id:
+>         return False
+>     if ".." in instinct_id:
+>         return False
+>     if instinct_id.startswith("."):
+>         return False
+>     return bool(re.match(r"^[A-Za-z0-9][A-Za-z0-9._-]*$", instinct_id))
+>
+>
+> # ─────────────────────────────────────────────
+> # Project Detection (Python equivalent of detect-project.sh)
+> # ─────────────────────────────────────────────
+>
+> def detect_project() -> dict:
+>     """Detect current project context. Returns dict with id, name, root, project_dir."""
+>     project_root = None
+>
+>     # 1. CLAUDE_PROJECT_DIR env var
+>     env_dir = os.environ.get("CLAUDE_PROJECT_DIR")
+>     if env_dir and os.path.isdir(env_dir):
+>         project_root = env_dir
+>
+>     # 2. git repo root
+>     if not project_root:
+>         try:
+>             result = subprocess.run(
+>                 ["git", "rev-parse", "--show-toplevel"],
+>                 capture_output=True, text=True, timeout=5
+>             )
+>             if result.returncode == 0:
+>                 project_root = result.stdout.strip()
+>         except (subprocess.TimeoutExpired, FileNotFoundError):
+>             pass
+>
+>     # 3. No project — global fallback
+>     if not project_root:
+>         return {
+>             "id": "global",
+>             "name": "global",
+>             "root": "",
+>             "project_dir": HOMUNCULUS_DIR,
+>             "instincts_personal": GLOBAL_PERSONAL_DIR,
+>             "instincts_inherited": GLOBAL_INHERITED_DIR,
+>             "evolved_dir": GLOBAL_EVOLVED_DIR,
+>             "observations_file": GLOBAL_OBSERVATIONS_FILE,
+>         }
+>
+>     project_name = os.path.basename(project_root)
+>
+>     # Derive project ID from git remote URL or path
+>     remote_url = ""
+>     try:
+>         result = subprocess.run(
+>             ["git", "-C", project_root, "remote", "get-url", "origin"],
+>             capture_output=True, text=True, timeout=5
+>         )
+>         if result.returncode == 0:
+>             remote_url = result.stdout.strip()
+>     except (subprocess.TimeoutExpired, FileNotFoundError):
+>         pass
+>
+>     hash_source = remote_url if remote_url else project_root
+>     project_id = hashlib.sha256(hash_source.encode()).hexdigest()[:12]
+>
+>     project_dir = PROJECTS_DIR / project_id
+>
+>     # Ensure project directory structure
+>     for d in [
+>         project_dir / "instincts" / "personal",
+>         project_dir / "instincts" / "inherited",
+>         project_dir / "observations.archive",
+>         project_dir / "evolved" / "skills",
+>         project_dir / "evolved" / "commands",
+>         project_dir / "evolved" / "agents",
+>     ]:
+>         d.mkdir(parents=True, exist_ok=True)
+>
+>     # Update registry
+>     _update_registry(project_id, project_name, project_root, remote_url)
+>
+>     return {
+>         "id": project_id,
+>         "name": project_name,
+>         "root": project_root,
+>         "remote": remote_url,
+>         "project_dir": project_dir,
+>         "instincts_personal": project_dir / "instincts" / "personal",
+>         "instincts_inherited": project_dir / "instincts" / "inherited",
+>         "evolved_dir": project_dir / "evolved",
+>         "observations_file": project_dir / "observations.jsonl",
+>     }
+>
+>
+> def _update_registry(pid: str, pname: str, proot: str, premote: str) -> None:
+>     """Update the projects.json registry."""
+>     try:
+>         with open(REGISTRY_FILE) as f:
+>             registry = json.load(f)
+>     except (FileNotFoundError, json.JSONDecodeError):
+>         registry = {}
+>
+>     registry[pid] = {
+>         "name": pname,
+>         "root": proot,
+>         "remote": premote,
+>         "last_seen": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+>     }
+>
+>     REGISTRY_FILE.parent.mkdir(parents=True, exist_ok=True)
+>     tmp_file = REGISTRY_FILE.parent / f".{REGISTRY_FILE.name}.tmp.{os.getpid()}"
+>     with open(tmp_file, "w") as f:
+>         json.dump(registry, f, indent=2)
+>         f.flush()
+>         os.fsync(f.fileno())
+>     os.replace(tmp_file, REGISTRY_FILE)
+>
+>
+> def load_registry() -> dict:
+>     """Load the projects registry."""
+>     try:
+>         with open(REGISTRY_FILE) as f:
+>             return json.load(f)
+>     except (FileNotFoundError, json.JSONDecodeError):
+>         return {}
+53c233
+<                 # End of frontmatter
+---
+>                 # End of frontmatter - content comes next, don't append yet
+55,59d234
+<                 if current:
+<                     current['content'] = '\n'.join(content_lines).strip()
+<                     instincts.append(current)
+<                     current = {}
+<                     content_lines = []
+89,90c264,294
+< def load_all_instincts() -> list[dict]:
+<     """Load all instincts from personal and inherited directories."""
+---
+> def _load_instincts_from_dir(directory: Path, source_type: str, scope_label: str) -> list[dict]:
+>     """Load instincts from a single directory."""
+>     instincts = []
+>     if not directory.exists():
+>         return instincts
+>     files = [
+>         file for file in sorted(directory.iterdir())
+>         if file.is_file() and file.suffix.lower() in ALLOWED_INSTINCT_EXTENSIONS
+>     ]
+>     for file in files:
+>         try:
+>             content = file.read_text()
+>             parsed = parse_instinct_file(content)
+>             for inst in parsed:
+>                 inst['_source_file'] = str(file)
+>                 inst['_source_type'] = source_type
+>                 inst['_scope_label'] = scope_label
+>                 # Default scope if not set in frontmatter
+>                 if 'scope' not in inst:
+>                     inst['scope'] = scope_label
+>             instincts.extend(parsed)
+>         except Exception as e:
+>             print(f"Warning: Failed to parse {file}: {e}", file=sys.stderr)
+>     return instincts
+>
+>
+> def load_all_instincts(project: dict, include_global: bool = True) -> list[dict]:
+>     """Load all instincts: project-scoped + global.
+>
+>     Project-scoped instincts take precedence over global ones when IDs conflict.
+>     """
+93,105c297,320
+<     for directory in [PERSONAL_DIR, INHERITED_DIR]:
+<         if not directory.exists():
+<             continue
+<         for file in directory.glob("*.yaml"):
+<             try:
+<                 content = file.read_text()
+<                 parsed = parse_instinct_file(content)
+<                 for inst in parsed:
+<                     inst['_source_file'] = str(file)
+<                     inst['_source_type'] = directory.name
+<                 instincts.extend(parsed)
+<             except Exception as e:
+<                 print(f"Warning: Failed to parse {file}: {e}", file=sys.stderr)
+---
+>     # 1. Load project-scoped instincts (if not already global)
+>     if project["id"] != "global":
+>         instincts.extend(_load_instincts_from_dir(
+>             project["instincts_personal"], "personal", "project"
+>         ))
+>         instincts.extend(_load_instincts_from_dir(
+>             project["instincts_inherited"], "inherited", "project"
+>         ))
+>
+>     # 2. Load global instincts
+>     if include_global:
+>         global_instincts = []
+>         global_instincts.extend(_load_instincts_from_dir(
+>             GLOBAL_PERSONAL_DIR, "personal", "global"
+>         ))
+>         global_instincts.extend(_load_instincts_from_dir(
+>             GLOBAL_INHERITED_DIR, "inherited", "global"
+>         ))
+>
+>         # Deduplicate: project-scoped wins over global when same ID
+>         project_ids = {i.get('id') for i in instincts}
+>         for gi in global_instincts:
+>             if gi.get('id') not in project_ids:
+>                 instincts.append(gi)
+109a325,336
+> def load_project_only_instincts(project: dict) -> list[dict]:
+>     """Load only project-scoped instincts (no global).
+>
+>     In global fallback mode (no git project), returns global instincts.
+>     """
+>     if project.get("id") == "global":
+>         instincts = _load_instincts_from_dir(GLOBAL_PERSONAL_DIR, "personal", "global")
+>         instincts += _load_instincts_from_dir(GLOBAL_INHERITED_DIR, "inherited", "global")
+>         return instincts
+>     return load_all_instincts(project, include_global=False)
+>
+>
+114,116c341,344
+< def cmd_status(args):
+<     """Show status of all instincts."""
+<     instincts = load_all_instincts()
+---
+> def cmd_status(args) -> int:
+>     """Show status of all instincts (project + global)."""
+>     project = detect_project()
+>     instincts = load_all_instincts(project)
+120,123c348,351
+<         print(f"\nInstinct directories:")
+<         print(f"  Personal:  {PERSONAL_DIR}")
+<         print(f"  Inherited: {INHERITED_DIR}")
+<         return
+---
+>         print(f"\nProject: {project['name']} ({project['id']})")
+>         print(f"  Project instincts:  {project['instincts_personal']}")
+>         print(f"  Global instincts:   {GLOBAL_PERSONAL_DIR}")
+>         return 0
+125,129c353,355
+<     # Group by domain
+<     by_domain = defaultdict(list)
+<     for inst in instincts:
+<         domain = inst.get('domain', 'general')
+<         by_domain[domain].append(inst)
+---
+>     # Split by scope
+>     project_instincts = [i for i in instincts if i.get('_scope_label') == 'project']
+>     global_instincts = [i for i in instincts if i.get('_scope_label') == 'global']
+136,140c362,364
+<     # Summary by source
+<     personal = [i for i in instincts if i.get('_source_type') == 'personal']
+<     inherited = [i for i in instincts if i.get('_source_type') == 'inherited']
+<     print(f"  Personal:  {len(personal)}")
+<     print(f"  Inherited: {len(inherited)}")
+---
+>     print(f"  Project:  {project['name']} ({project['id']})")
+>     print(f"  Project instincts: {len(project_instincts)}")
+>     print(f"  Global instincts:  {len(global_instincts)}")
+143c367,398
+<     # Print by domain
+---
+>     # Print project-scoped instincts
+>     if project_instincts:
+>         print(f"## PROJECT-SCOPED ({project['name']})")
+>         print()
+>         _print_instincts_by_domain(project_instincts)
+>
+>     # Print global instincts
+>     if global_instincts:
+>         print(f"## GLOBAL (apply to all projects)")
+>         print()
+>         _print_instincts_by_domain(global_instincts)
+>
+>     # Observations stats
+>     obs_file = project.get("observations_file")
+>     if obs_file and Path(obs_file).exists():
+>         with open(obs_file) as f:
+>             obs_count = sum(1 for _ in f)
+>         print(f"-" * 60)
+>         print(f"  Observations: {obs_count} events logged")
+>         print(f"  File: {obs_file}")
+>
+>     print(f"\n{'='*60}\n")
+>     return 0
+>
+>
+> def _print_instincts_by_domain(instincts: list[dict]) -> None:
+>     """Helper to print instincts grouped by domain."""
+>     by_domain = defaultdict(list)
+>     for inst in instincts:
+>         domain = inst.get('domain', 'general')
+>         by_domain[domain].append(inst)
+>
+146c401
+<         print(f"## {domain.upper()} ({len(domain_instincts)})")
+---
+>         print(f"  ### {domain.upper()} ({len(domain_instincts)})")
+151c406
+<             conf_bar = '█' * int(conf * 10) + '░' * (10 - int(conf * 10))
+---
+>             conf_bar = '\u2588' * int(conf * 10) + '\u2591' * (10 - int(conf * 10))
+153c408
+<             source = inst.get('source', 'unknown')
+---
+>             scope_tag = f"[{inst.get('scope', '?')}]"
+155,156c410,411
+<             print(f"  {conf_bar} {int(conf*100):3d}%  {inst.get('id', 'unnamed')}")
+<             print(f"            trigger: {trigger}")
+---
+>             print(f"    {conf_bar} {int(conf*100):3d}%  {inst.get('id', 'unnamed')} {scope_tag}")
+>             print(f"              trigger: {trigger}")
+163c418
+<                 print(f"            action: {action[:60]}{'...' if len(action) > 60 else ''}")
+---
+>                 print(f"              action: {action[:60]}{'...' if len(action) > 60 else ''}")
+167,175d421
+<     # Observations stats
+<     if OBSERVATIONS_FILE.exists():
+<         obs_count = sum(1 for _ in open(OBSERVATIONS_FILE))
+<         print(f"─────────────────────────────────────────────────────────")
+<         print(f"  Observations: {obs_count} events logged")
+<         print(f"  File: {OBSERVATIONS_FILE}")
+<
+<     print(f"\n{'='*60}\n")
+<
+181c427
+< def cmd_import(args):
+---
+> def cmd_import(args) -> int:
+182a429
+>     project = detect_project()
+184a432,437
+>     # Determine target scope
+>     target_scope = args.scope or "project"
+>     if target_scope == "project" and project["id"] == "global":
+>         print("No project detected. Importing as global scope.")
+>         target_scope = "global"
+>
+195,197c448,451
+<         path = Path(source).expanduser()
+<         if not path.exists():
+<             print(f"File not found: {path}", file=sys.stderr)
+---
+>         try:
+>             path = _validate_file_path(source, must_exist=True)
+>         except ValueError as e:
+>             print(f"Invalid path: {e}", file=sys.stderr)
+207c461,465
+<     print(f"\nFound {len(new_instincts)} instincts to import.\n")
+---
+>     print(f"\nFound {len(new_instincts)} instincts to import.")
+>     print(f"Target scope: {target_scope}")
+>     if target_scope == "project":
+>         print(f"Target project: {project['name']} ({project['id']})")
+>     print()
+209,210c467,468
+<     # Load existing
+<     existing = load_all_instincts()
+---
+>     # Load existing instincts for dedup
+>     existing = load_all_instincts(project)
+221d478
+<             # Check if we should update
+232c489
+<     min_conf = args.min_confidence or 0.0
+---
+>     min_conf = args.min_confidence if args.min_confidence is not None else 0.0
+269c526,534
+<     # Write to inherited directory
+---
+>     # Determine output directory based on scope
+>     if target_scope == "global":
+>         output_dir = GLOBAL_INHERITED_DIR
+>     else:
+>         output_dir = project["instincts_inherited"]
+>
+>     output_dir.mkdir(parents=True, exist_ok=True)
+>
+>     # Write
+272c537
+<     output_file = INHERITED_DIR / f"{source_name}-{timestamp}.yaml"
+---
+>     output_file = output_dir / f"{source_name}-{timestamp}.yaml"
+275c540,543
+<     output_content = f"# Imported from {source}\n# Date: {datetime.now().isoformat()}\n\n"
+---
+>     output_content = f"# Imported from {source}\n# Date: {datetime.now().isoformat()}\n# Scope: {target_scope}\n"
+>     if target_scope == "project":
+>         output_content += f"# Project: {project['name']} ({project['id']})\n"
+>     output_content += "\n"
+283a552
+>         output_content += f"scope: {target_scope}\n"
+284a554,556
+>         if target_scope == "project":
+>             output_content += f"project_id: {project['id']}\n"
+>             output_content += f"project_name: {project['name']}\n"
+292c564,565
+<     print(f"\n✅ Import complete!")
+---
+>     print(f"\nImport complete!")
+>     print(f"   Scope: {target_scope}")
+304c577
+< def cmd_export(args):
+---
+> def cmd_export(args) -> int:
+306c579,588
+<     instincts = load_all_instincts()
+---
+>     project = detect_project()
+>
+>     # Determine what to export based on scope filter
+>     if args.scope == "project":
+>         instincts = load_project_only_instincts(project)
+>     elif args.scope == "global":
+>         instincts = _load_instincts_from_dir(GLOBAL_PERSONAL_DIR, "personal", "global")
+>         instincts += _load_instincts_from_dir(GLOBAL_INHERITED_DIR, "inherited", "global")
+>     else:
+>         instincts = load_all_instincts(project)
+325c607,612
+<     output = f"# Instincts export\n# Date: {datetime.now().isoformat()}\n# Total: {len(instincts)}\n\n"
+---
+>     output = f"# Instincts export\n# Date: {datetime.now().isoformat()}\n# Total: {len(instincts)}\n"
+>     if args.scope:
+>         output += f"# Scope: {args.scope}\n"
+>     if project["id"] != "global":
+>         output += f"# Project: {project['name']} ({project['id']})\n"
+>     output += "\n"
+329c616,617
+<         for key in ['id', 'trigger', 'confidence', 'domain', 'source', 'source_repo']:
+---
+>         for key in ['id', 'trigger', 'confidence', 'domain', 'source', 'scope',
+>                      'project_id', 'project_name', 'source_repo']:
+341,342c629,635
+<         Path(args.output).write_text(output)
+<         print(f"Exported {len(instincts)} instincts to {args.output}")
+---
+>         try:
+>             out_path = _validate_file_path(args.output)
+>         except ValueError as e:
+>             print(f"Invalid output path: {e}", file=sys.stderr)
+>             return 1
+>         out_path.write_text(output)
+>         print(f"Exported {len(instincts)} instincts to {out_path}")
+353c646
+< def cmd_evolve(args):
+---
+> def cmd_evolve(args) -> int:
+355c648,649
+<     instincts = load_all_instincts()
+---
+>     project = detect_project()
+>     instincts = load_all_instincts(project)
+361a656,658
+>     project_instincts = [i for i in instincts if i.get('_scope_label') == 'project']
+>     global_instincts = [i for i in instincts if i.get('_scope_label') == 'global']
+>
+363a661,662
+>     print(f"  Project: {project['name']} ({project['id']})")
+>     print(f"  Project-scoped: {len(project_instincts)} | Global: {len(global_instincts)}")
+386c685
+<     # Find clusters with 3+ instincts (good skill candidates)
+---
+>     # Find clusters with 2+ instincts (good skill candidates)
+395c694,695
+<                 'domains': list(set(i.get('domain', 'general') for i in cluster))
+---
+>                 'domains': list(set(i.get('domain', 'general') for i in cluster)),
+>                 'scopes': list(set(i.get('scope', 'project') for i in cluster)),
+405a706
+>             scope_info = ', '.join(cand['scopes'])
+409a711
+>             print(f"   Scopes: {scope_info}")
+412c714
+<                 print(f"     - {inst.get('id')}")
+---
+>                 print(f"     - {inst.get('id')} [{inst.get('scope', '?')}]")
+421d722
+<             # Suggest command name
+425c726
+<             print(f"    From: {inst.get('id')}")
+---
+>             print(f"    From: {inst.get('id')} [{inst.get('scope', '?')}]")
+439a741,743
+>     # Promotion candidates (project instincts that could be global)
+>     _show_promotion_candidates(project)
+>
+441,444c745,752
+<         print("\n[Would generate evolved structures here]")
+<         print("  Skills would be saved to:", EVOLVED_DIR / "skills")
+<         print("  Commands would be saved to:", EVOLVED_DIR / "commands")
+<         print("  Agents would be saved to:", EVOLVED_DIR / "agents")
+---
+>         evolved_dir = project["evolved_dir"] if project["id"] != "global" else GLOBAL_EVOLVED_DIR
+>         generated = _generate_evolved(skill_candidates, workflow_instincts, agent_candidates, evolved_dir)
+>         if generated:
+>             print(f"\nGenerated {len(generated)} evolved structures:")
+>             for path in generated:
+>                 print(f"   {path}")
+>         else:
+>             print("\nNo structures generated (need higher-confidence clusters).")
+450a759,1086
+> # Promote Command
+> # ─────────────────────────────────────────────
+>
+> def _find_cross_project_instincts() -> dict:
+>     """Find instincts that appear in multiple projects (promotion candidates).
+>
+>     Returns dict mapping instinct ID → list of (project_id, instinct) tuples.
+>     """
+>     registry = load_registry()
+>     cross_project = defaultdict(list)
+>
+>     for pid, pinfo in registry.items():
+>         project_dir = PROJECTS_DIR / pid
+>         personal_dir = project_dir / "instincts" / "personal"
+>         inherited_dir = project_dir / "instincts" / "inherited"
+>
+>         for d, stype in [(personal_dir, "personal"), (inherited_dir, "inherited")]:
+>             for inst in _load_instincts_from_dir(d, stype, "project"):
+>                 iid = inst.get('id')
+>                 if iid:
+>                     cross_project[iid].append((pid, pinfo.get('name', pid), inst))
+>
+>     # Filter to only those appearing in 2+ projects
+>     return {iid: entries for iid, entries in cross_project.items() if len(entries) >= 2}
+>
+>
+> def _show_promotion_candidates(project: dict) -> None:
+>     """Show instincts that could be promoted from project to global."""
+>     cross = _find_cross_project_instincts()
+>
+>     if not cross:
+>         return
+>
+>     # Filter to high-confidence ones not already global
+>     global_instincts = _load_instincts_from_dir(GLOBAL_PERSONAL_DIR, "personal", "global")
+>     global_instincts += _load_instincts_from_dir(GLOBAL_INHERITED_DIR, "inherited", "global")
+>     global_ids = {i.get('id') for i in global_instincts}
+>
+>     candidates = []
+>     for iid, entries in cross.items():
+>         if iid in global_ids:
+>             continue
+>         avg_conf = sum(e[2].get('confidence', 0.5) for e in entries) / len(entries)
+>         if avg_conf >= PROMOTE_CONFIDENCE_THRESHOLD:
+>             candidates.append({
+>                 'id': iid,
+>                 'projects': [(pid, pname) for pid, pname, _ in entries],
+>                 'avg_confidence': avg_conf,
+>                 'sample': entries[0][2],
+>             })
+>
+>     if candidates:
+>         print(f"\n## PROMOTION CANDIDATES (project -> global)\n")
+>         print(f"  These instincts appear in {PROMOTE_MIN_PROJECTS}+ projects with high confidence:\n")
+>         for cand in candidates[:10]:
+>             proj_names = ', '.join(pname for _, pname in cand['projects'])
+>             print(f"  * {cand['id']} (avg: {cand['avg_confidence']:.0%})")
+>             print(f"    Found in: {proj_names}")
+>             print()
+>         print(f"  Run `instinct-cli.py promote` to promote these to global scope.\n")
+>
+>
+> def cmd_promote(args) -> int:
+>     """Promote project-scoped instincts to global scope."""
+>     project = detect_project()
+>
+>     if args.instinct_id:
+>         # Promote a specific instinct
+>         return _promote_specific(project, args.instinct_id, args.force)
+>     else:
+>         # Auto-detect promotion candidates
+>         return _promote_auto(project, args.force, args.dry_run)
+>
+>
+> def _promote_specific(project: dict, instinct_id: str, force: bool) -> int:
+>     """Promote a specific instinct by ID from current project to global."""
+>     if not _validate_instinct_id(instinct_id):
+>         print(f"Invalid instinct ID: '{instinct_id}'.", file=sys.stderr)
+>         return 1
+>
+>     project_instincts = load_project_only_instincts(project)
+>     target = next((i for i in project_instincts if i.get('id') == instinct_id), None)
+>
+>     if not target:
+>         print(f"Instinct '{instinct_id}' not found in project {project['name']}.")
+>         return 1
+>
+>     # Check if already global
+>     global_instincts = _load_instincts_from_dir(GLOBAL_PERSONAL_DIR, "personal", "global")
+>     global_instincts += _load_instincts_from_dir(GLOBAL_INHERITED_DIR, "inherited", "global")
+>     if any(i.get('id') == instinct_id for i in global_instincts):
+>         print(f"Instinct '{instinct_id}' already exists in global scope.")
+>         return 1
+>
+>     print(f"\nPromoting: {instinct_id}")
+>     print(f"  From: project '{project['name']}'")
+>     print(f"  Confidence: {target.get('confidence', 0.5):.0%}")
+>     print(f"  Domain: {target.get('domain', 'general')}")
+>
+>     if not force:
+>         response = input(f"\nPromote to global? [y/N] ")
+>         if response.lower() != 'y':
+>             print("Cancelled.")
+>             return 0
+>
+>     # Write to global personal directory
+>     output_file = GLOBAL_PERSONAL_DIR / f"{instinct_id}.yaml"
+>     output_content = "---\n"
+>     output_content += f"id: {target.get('id')}\n"
+>     output_content += f"trigger: \"{target.get('trigger', 'unknown')}\"\n"
+>     output_content += f"confidence: {target.get('confidence', 0.5)}\n"
+>     output_content += f"domain: {target.get('domain', 'general')}\n"
+>     output_content += f"source: {target.get('source', 'promoted')}\n"
+>     output_content += f"scope: global\n"
+>     output_content += f"promoted_from: {project['id']}\n"
+>     output_content += f"promoted_date: {datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')}\n"
+>     output_content += "---\n\n"
+>     output_content += target.get('content', '') + "\n"
+>
+>     output_file.write_text(output_content)
+>     print(f"\nPromoted '{instinct_id}' to global scope.")
+>     print(f"  Saved to: {output_file}")
+>     return 0
+>
+>
+> def _promote_auto(project: dict, force: bool, dry_run: bool) -> int:
+>     """Auto-promote instincts found in multiple projects."""
+>     cross = _find_cross_project_instincts()
+>
+>     global_instincts = _load_instincts_from_dir(GLOBAL_PERSONAL_DIR, "personal", "global")
+>     global_instincts += _load_instincts_from_dir(GLOBAL_INHERITED_DIR, "inherited", "global")
+>     global_ids = {i.get('id') for i in global_instincts}
+>
+>     candidates = []
+>     for iid, entries in cross.items():
+>         if iid in global_ids:
+>             continue
+>         avg_conf = sum(e[2].get('confidence', 0.5) for e in entries) / len(entries)
+>         if avg_conf >= PROMOTE_CONFIDENCE_THRESHOLD and len(entries) >= PROMOTE_MIN_PROJECTS:
+>             candidates.append({
+>                 'id': iid,
+>                 'entries': entries,
+>                 'avg_confidence': avg_conf,
+>             })
+>
+>     if not candidates:
+>         print("No instincts qualify for auto-promotion.")
+>         print(f"  Criteria: appears in {PROMOTE_MIN_PROJECTS}+ projects, avg confidence >= {PROMOTE_CONFIDENCE_THRESHOLD:.0%}")
+>         return 0
+>
+>     print(f"\n{'='*60}")
+>     print(f"  AUTO-PROMOTION CANDIDATES - {len(candidates)} found")
+>     print(f"{'='*60}\n")
+>
+>     for cand in candidates:
+>         proj_names = ', '.join(pname for _, pname, _ in cand['entries'])
+>         print(f"  {cand['id']} (avg: {cand['avg_confidence']:.0%})")
+>         print(f"    Found in {len(cand['entries'])} projects: {proj_names}")
+>
+>     if dry_run:
+>         print(f"\n[DRY RUN] No changes made.")
+>         return 0
+>
+>     if not force:
+>         response = input(f"\nPromote {len(candidates)} instincts to global? [y/N] ")
+>         if response.lower() != 'y':
+>             print("Cancelled.")
+>             return 0
+>
+>     promoted = 0
+>     for cand in candidates:
+>         if not _validate_instinct_id(cand['id']):
+>             print(f"Skipping invalid instinct ID during promotion: {cand['id']}", file=sys.stderr)
+>             continue
+>
+>         # Use the highest-confidence version
+>         best_entry = max(cand['entries'], key=lambda e: e[2].get('confidence', 0.5))
+>         inst = best_entry[2]
+>
+>         output_file = GLOBAL_PERSONAL_DIR / f"{cand['id']}.yaml"
+>         output_content = "---\n"
+>         output_content += f"id: {inst.get('id')}\n"
+>         output_content += f"trigger: \"{inst.get('trigger', 'unknown')}\"\n"
+>         output_content += f"confidence: {cand['avg_confidence']}\n"
+>         output_content += f"domain: {inst.get('domain', 'general')}\n"
+>         output_content += f"source: auto-promoted\n"
+>         output_content += f"scope: global\n"
+>         output_content += f"promoted_date: {datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')}\n"
+>         output_content += f"seen_in_projects: {len(cand['entries'])}\n"
+>         output_content += "---\n\n"
+>         output_content += inst.get('content', '') + "\n"
+>
+>         output_file.write_text(output_content)
+>         promoted += 1
+>
+>     print(f"\nPromoted {promoted} instincts to global scope.")
+>     return 0
+>
+>
+> # ─────────────────────────────────────────────
+> # Projects Command
+> # ─────────────────────────────────────────────
+>
+> def cmd_projects(args) -> int:
+>     """List all known projects and their instinct counts."""
+>     registry = load_registry()
+>
+>     if not registry:
+>         print("No projects registered yet.")
+>         print("Projects are auto-detected when you use Claude Code in a git repo.")
+>         return 0
+>
+>     print(f"\n{'='*60}")
+>     print(f"  KNOWN PROJECTS - {len(registry)} total")
+>     print(f"{'='*60}\n")
+>
+>     for pid, pinfo in sorted(registry.items(), key=lambda x: x[1].get('last_seen', ''), reverse=True):
+>         project_dir = PROJECTS_DIR / pid
+>         personal_dir = project_dir / "instincts" / "personal"
+>         inherited_dir = project_dir / "instincts" / "inherited"
+>
+>         personal_count = len(_load_instincts_from_dir(personal_dir, "personal", "project"))
+>         inherited_count = len(_load_instincts_from_dir(inherited_dir, "inherited", "project"))
+>         obs_file = project_dir / "observations.jsonl"
+>         if obs_file.exists():
+>             with open(obs_file) as f:
+>                 obs_count = sum(1 for _ in f)
+>         else:
+>             obs_count = 0
+>
+>         print(f"  {pinfo.get('name', pid)} [{pid}]")
+>         print(f"    Root: {pinfo.get('root', 'unknown')}")
+>         if pinfo.get('remote'):
+>             print(f"    Remote: {pinfo['remote']}")
+>         print(f"    Instincts: {personal_count} personal, {inherited_count} inherited")
+>         print(f"    Observations: {obs_count} events")
+>         print(f"    Last seen: {pinfo.get('last_seen', 'unknown')}")
+>         print()
+>
+>     # Global stats
+>     global_personal = len(_load_instincts_from_dir(GLOBAL_PERSONAL_DIR, "personal", "global"))
+>     global_inherited = len(_load_instincts_from_dir(GLOBAL_INHERITED_DIR, "inherited", "global"))
+>     print(f"  GLOBAL")
+>     print(f"    Instincts: {global_personal} personal, {global_inherited} inherited")
+>
+>     print(f"\n{'='*60}\n")
+>     return 0
+>
+>
+> # ─────────────────────────────────────────────
+> # Generate Evolved Structures
+> # ─────────────────────────────────────────────
+>
+> def _generate_evolved(skill_candidates: list, workflow_instincts: list, agent_candidates: list, evolved_dir: Path) -> list[str]:
+>     """Generate skill/command/agent files from analyzed instinct clusters."""
+>     generated = []
+>
+>     # Generate skills from top candidates
+>     for cand in skill_candidates[:5]:
+>         trigger = cand['trigger'].strip()
+>         if not trigger:
+>             continue
+>         name = re.sub(r'[^a-z0-9]+', '-', trigger.lower()).strip('-')[:30]
+>         if not name:
+>             continue
+>
+>         skill_dir = evolved_dir / "skills" / name
+>         skill_dir.mkdir(parents=True, exist_ok=True)
+>
+>         content = f"# {name}\n\n"
+>         content += f"Evolved from {len(cand['instincts'])} instincts "
+>         content += f"(avg confidence: {cand['avg_confidence']:.0%})\n\n"
+>         content += f"## When to Apply\n\n"
+>         content += f"Trigger: {trigger}\n\n"
+>         content += f"## Actions\n\n"
+>         for inst in cand['instincts']:
+>             inst_content = inst.get('content', '')
+>             action_match = re.search(r'## Action\s*\n\s*(.+?)(?:\n\n|\n##|$)', inst_content, re.DOTALL)
+>             action = action_match.group(1).strip() if action_match else inst.get('id', 'unnamed')
+>             content += f"- {action}\n"
+>
+>         (skill_dir / "SKILL.md").write_text(content)
+>         generated.append(str(skill_dir / "SKILL.md"))
+>
+>     # Generate commands from workflow instincts
+>     for inst in workflow_instincts[:5]:
+>         trigger = inst.get('trigger', 'unknown')
+>         cmd_name = re.sub(r'[^a-z0-9]+', '-', trigger.lower().replace('when ', '').replace('implementing ', ''))
+>         cmd_name = cmd_name.strip('-')[:20]
+>         if not cmd_name:
+>             continue
+>
+>         cmd_file = evolved_dir / "commands" / f"{cmd_name}.md"
+>         content = f"# {cmd_name}\n\n"
+>         content += f"Evolved from instinct: {inst.get('id', 'unnamed')}\n"
+>         content += f"Confidence: {inst.get('confidence', 0.5):.0%}\n\n"
+>         content += inst.get('content', '')
+>
+>         cmd_file.write_text(content)
+>         generated.append(str(cmd_file))
+>
+>     # Generate agents from complex clusters
+>     for cand in agent_candidates[:3]:
+>         trigger = cand['trigger'].strip()
+>         agent_name = re.sub(r'[^a-z0-9]+', '-', trigger.lower()).strip('-')[:20]
+>         if not agent_name:
+>             continue
+>
+>         agent_file = evolved_dir / "agents" / f"{agent_name}.md"
+>         domains = ', '.join(cand['domains'])
+>         instinct_ids = [i.get('id', 'unnamed') for i in cand['instincts']]
+>
+>         content = f"---\nmodel: sonnet\ntools: Read, Grep, Glob\n---\n"
+>         content += f"# {agent_name}\n\n"
+>         content += f"Evolved from {len(cand['instincts'])} instincts "
+>         content += f"(avg confidence: {cand['avg_confidence']:.0%})\n"
+>         content += f"Domains: {domains}\n\n"
+>         content += f"## Source Instincts\n\n"
+>         for iid in instinct_ids:
+>             content += f"- {iid}\n"
+>
+>         agent_file.write_text(content)
+>         generated.append(str(agent_file))
+>
+>     return generated
+>
+>
+> # ─────────────────────────────────────────────
+454,455c1090,1092
+< def main():
+<     parser = argparse.ArgumentParser(description='Instinct CLI for Continuous Learning v2')
+---
+> def main() -> int:
+>     _ensure_global_dirs()
+>     parser = argparse.ArgumentParser(description='Instinct CLI for Continuous Learning v2.1 (Project-Scoped)')
+459c1096
+<     status_parser = subparsers.add_parser('status', help='Show instinct status')
+---
+>     status_parser = subparsers.add_parser('status', help='Show instinct status (project + global)')
+466a1104,1105
+>     import_parser.add_argument('--scope', choices=['project', 'global'], default='project',
+>                                help='Import scope (default: project)')
+472a1112,1113
+>     export_parser.add_argument('--scope', choices=['project', 'global', 'all'], default='all',
+>                                help='Export scope (default: all)')
+477a1119,1127
+>     # Promote (new in v2.1)
+>     promote_parser = subparsers.add_parser('promote', help='Promote project instincts to global scope')
+>     promote_parser.add_argument('instinct_id', nargs='?', help='Specific instinct ID to promote')
+>     promote_parser.add_argument('--force', action='store_true', help='Skip confirmation')
+>     promote_parser.add_argument('--dry-run', action='store_true', help='Preview without promoting')
+>
+>     # Projects (new in v2.1)
+>     projects_parser = subparsers.add_parser('projects', help='List known projects and instinct counts')
+>
+487a1138,1141
+>     elif args.command == 'promote':
+>         return cmd_promote(args)
+>     elif args.command == 'projects':
+>         return cmd_projects(args)
+494c1148
+<     sys.exit(main() or 0)
+---
+>     sys.exit(main())
+Only in /tmp/affaan-everything-claude-code/skills/continuous-learning-v2/scripts: test_parse_instinct.py
+diff -r /tmp/everything-claude-code/skills/django-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/django-patterns/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/django-security/SKILL.md /tmp/affaan-everything-claude-code/skills/django-security/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/django-tdd/SKILL.md /tmp/affaan-everything-claude-code/skills/django-tdd/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/django-verification/SKILL.md /tmp/affaan-everything-claude-code/skills/django-verification/SKILL.md
+3c3,4
+< description: Verification loop for Django projects: migrations, linting, tests with coverage, security scans, and deployment readiness checks before release or PR.
+---
+> description: "Verification loop for Django projects: migrations, linting, tests with coverage, security scans, and deployment readiness checks before release or PR."
+> origin: ECC
+8a10,17
+>
+> ## When to Activate
+>
+> - Before opening a pull request for a Django project
+> - After major model changes, migration updates, or dependency upgrades
+> - Pre-deployment verification for staging or production
+> - Running full environment → lint → test → security → deploy readiness pipeline
+> - Validating migration safety and test coverage
+diff -r /tmp/everything-claude-code/skills/eval-harness/SKILL.md /tmp/affaan-everything-claude-code/skills/eval-harness/SKILL.md
+3a4
+> origin: ECC
+9a11,18
+>
+> ## When to Activate
+>
+> - Setting up eval-driven development (EDD) for AI-assisted workflows
+> - Defining pass/fail criteria for Claude Code task completion
+> - Measuring agent reliability with pass@k metrics
+> - Creating regression test suites for prompt or agent changes
+> - Benchmarking agent performance across model versions
+diff -r /tmp/everything-claude-code/skills/frontend-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/frontend-patterns/SKILL.md
+3a4
+> origin: ECC
+8a10,19
+>
+> ## When to Activate
+>
+> - Building React components (composition, props, rendering)
+> - Managing state (useState, useReducer, Zustand, Context)
+> - Implementing data fetching (SWR, React Query, server components)
+> - Optimizing performance (memoization, virtualization, code splitting)
+> - Working with forms (validation, controlled inputs, Zod schemas)
+> - Handling client-side routing and navigation
+> - Building accessible, responsive UI patterns
+diff -r /tmp/everything-claude-code/skills/golang-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/golang-patterns/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/golang-testing/SKILL.md /tmp/affaan-everything-claude-code/skills/golang-testing/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/iterative-retrieval/SKILL.md /tmp/affaan-everything-claude-code/skills/iterative-retrieval/SKILL.md
+3a4
+> origin: ECC
+8a10,17
+>
+> ## When to Activate
+>
+> - Spawning subagents that need codebase context they cannot predict upfront
+> - Building multi-agent workflows where context is progressively refined
+> - Encountering "context too large" or "missing context" failures in agent tasks
+> - Designing RAG-like retrieval pipelines for code exploration
+> - Optimizing token usage in agent orchestration
+diff -r /tmp/everything-claude-code/skills/java-coding-standards/SKILL.md /tmp/affaan-everything-claude-code/skills/java-coding-standards/SKILL.md
+3c3,4
+< description: Java coding standards for Spring Boot services: naming, immutability, Optional usage, streams, exceptions, generics, and project layout.
+---
+> description: "Java coding standards for Spring Boot services: naming, immutability, Optional usage, streams, exceptions, generics, and project layout."
+> origin: ECC
+8a10,17
+>
+> ## When to Activate
+>
+> - Writing or reviewing Java code in Spring Boot projects
+> - Enforcing naming, immutability, or exception handling conventions
+> - Working with records, sealed classes, or pattern matching (Java 17+)
+> - Reviewing use of Optional, streams, or generics
+> - Structuring packages and project layout
+diff -r /tmp/everything-claude-code/skills/jpa-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/jpa-patterns/SKILL.md
+3a4
+> origin: ECC
+8a10,18
+>
+> ## When to Activate
+>
+> - Designing JPA entities and table mappings
+> - Defining relationships (@OneToMany, @ManyToOne, @ManyToMany)
+> - Optimizing queries (N+1 prevention, fetch strategies, projections)
+> - Configuring transactions, auditing, or soft deletes
+> - Setting up pagination, sorting, or custom repository methods
+> - Tuning connection pooling (HikariCP) or second-level caching
+diff -r /tmp/everything-claude-code/skills/postgres-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/postgres-patterns/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/project-guidelines-example/SKILL.md /tmp/affaan-everything-claude-code/skills/project-guidelines-example/SKILL.md
+0a1,6
+> ---
+> name: project-guidelines-example
+> description: "Example project-specific skill template based on a real production application."
+> origin: ECC
+> ---
+>
+6,7d11
+<
+< ---
+diff -r /tmp/everything-claude-code/skills/python-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/python-patterns/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/python-testing/SKILL.md /tmp/affaan-everything-claude-code/skills/python-testing/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/security-review/SKILL.md /tmp/affaan-everything-claude-code/skills/security-review/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/springboot-patterns/SKILL.md /tmp/affaan-everything-claude-code/skills/springboot-patterns/SKILL.md
+3a4
+> origin: ECC
+8a10,18
+>
+> ## When to Activate
+>
+> - Building REST APIs with Spring MVC or WebFlux
+> - Structuring controller → service → repository layers
+> - Configuring Spring Data JPA, caching, or async processing
+> - Adding validation, exception handling, or pagination
+> - Setting up profiles for dev/staging/production environments
+> - Implementing event-driven patterns with Spring Events or Kafka
+diff -r /tmp/everything-claude-code/skills/springboot-security/SKILL.md /tmp/affaan-everything-claude-code/skills/springboot-security/SKILL.md
+3a4
+> origin: ECC
+9a11,20
+> ## When to Activate
+>
+> - Adding authentication (JWT, OAuth2, session-based)
+> - Implementing authorization (@PreAuthorize, role-based access)
+> - Validating user input (Bean Validation, custom validators)
+> - Configuring CORS, CSRF, or security headers
+> - Managing secrets (Vault, environment variables)
+> - Adding rate limiting or brute-force protection
+> - Scanning dependencies for CVEs
+>
+44a56,75
+> ```java
+> @RestController
+> @RequestMapping("/api/admin")
+> public class AdminController {
+>
+>   @PreAuthorize("hasRole('ADMIN')")
+>   @GetMapping("/users")
+>   public List<UserDto> listUsers() {
+>     return userService.findAll();
+>   }
+>
+>   @PreAuthorize("@authz.isOwner(#id, authentication)")
+>   @DeleteMapping("/users/{id}")
+>   public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+>     userService.delete(id);
+>     return ResponseEntity.noContent().build();
+>   }
+> }
+> ```
+>
+50a82,102
+> ```java
+> // BAD: No validation
+> @PostMapping("/users")
+> public User createUser(@RequestBody UserDto dto) {
+>   return userService.create(dto);
+> }
+>
+> // GOOD: Validated DTO
+> public record CreateUserDto(
+>     @NotBlank @Size(max = 100) String name,
+>     @NotBlank @Email String email,
+>     @NotNull @Min(0) @Max(150) Integer age
+> ) {}
+>
+> @PostMapping("/users")
+> public ResponseEntity<UserDto> createUser(@Valid @RequestBody CreateUserDto dto) {
+>   return ResponseEntity.status(HttpStatus.CREATED)
+>       .body(userService.create(dto));
+> }
+> ```
+>
+55a108,137
+> ```java
+> // BAD: String concatenation in native query
+> @Query(value = "SELECT * FROM users WHERE name = '" + name + "'", nativeQuery = true)
+>
+> // GOOD: Parameterized native query
+> @Query(value = "SELECT * FROM users WHERE name = :name", nativeQuery = true)
+> List<User> findByName(@Param("name") String name);
+>
+> // GOOD: Spring Data derived query (auto-parameterized)
+> List<User> findByEmailAndActiveTrue(String email);
+> ```
+>
+> ## Password Encoding
+>
+> - Always hash passwords with BCrypt or Argon2 — never store plaintext
+> - Use `PasswordEncoder` bean, not manual hashing
+>
+> ```java
+> @Bean
+> public PasswordEncoder passwordEncoder() {
+>   return new BCryptPasswordEncoder(12); // cost factor 12
+> }
+>
+> // In service
+> public User register(CreateUserDto dto) {
+>   String hashedPassword = passwordEncoder.encode(dto.password());
+>   return userRepository.save(new User(dto.email(), hashedPassword));
+> }
+> ```
+>
+72a155,173
+> ```yaml
+> # BAD: Hardcoded in application.yml
+> spring:
+>   datasource:
+>     password: mySecretPassword123
+>
+> # GOOD: Environment variable placeholder
+> spring:
+>   datasource:
+>     password: ${DB_PASSWORD}
+>
+> # GOOD: Spring Cloud Vault integration
+> spring:
+>   cloud:
+>     vault:
+>       uri: https://vault.example.com
+>       token: ${VAULT_TOKEN}
+> ```
+>
+84a186,209
+> ## CORS Configuration
+>
+> - Configure CORS at the security filter level, not per-controller
+> - Restrict allowed origins — never use `*` in production
+>
+> ```java
+> @Bean
+> public CorsConfigurationSource corsConfigurationSource() {
+>   CorsConfiguration config = new CorsConfiguration();
+>   config.setAllowedOrigins(List.of("https://app.example.com"));
+>   config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+>   config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+>   config.setAllowCredentials(true);
+>   config.setMaxAge(3600L);
+>
+>   UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+>   source.registerCorsConfiguration("/api/**", config);
+>   return source;
+> }
+>
+> // In SecurityFilterChain:
+> http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+> ```
+>
+88a214,241
+>
+> ```java
+> // Using Bucket4j for per-endpoint rate limiting
+> @Component
+> public class RateLimitFilter extends OncePerRequestFilter {
+>   private final Map<String, Bucket> buckets = new ConcurrentHashMap<>();
+>
+>   private Bucket createBucket() {
+>     return Bucket.builder()
+>         .addLimit(Bandwidth.classic(100, Refill.intervally(100, Duration.ofMinutes(1))))
+>         .build();
+>   }
+>
+>   @Override
+>   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+>       FilterChain chain) throws ServletException, IOException {
+>     String clientIp = request.getRemoteAddr();
+>     Bucket bucket = buckets.computeIfAbsent(clientIp, k -> createBucket());
+>
+>     if (bucket.tryConsume(1)) {
+>       chain.doFilter(request, response);
+>     } else {
+>       response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+>       response.getWriter().write("{\"error\": \"Rate limit exceeded\"}");
+>     }
+>   }
+> }
+> ```
+diff -r /tmp/everything-claude-code/skills/springboot-tdd/SKILL.md /tmp/affaan-everything-claude-code/skills/springboot-tdd/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/springboot-verification/SKILL.md /tmp/affaan-everything-claude-code/skills/springboot-verification/SKILL.md
+3c3,4
+< description: Verification loop for Spring Boot projects: build, static analysis, tests with coverage, security scans, and diff review before release or PR.
+---
+> description: "Verification loop for Spring Boot projects: build, static analysis, tests with coverage, security scans, and diff review before release or PR."
+> origin: ECC
+9a11,18
+> ## When to Activate
+>
+> - Before opening a pull request for a Spring Boot service
+> - After major refactoring or dependency upgrades
+> - Pre-deployment verification for staging or production
+> - Running full build → lint → test → security scan pipeline
+> - Validating test coverage meets thresholds
+>
+44a54,158
+> ### Unit Tests
+>
+> Test service logic in isolation with mocked dependencies:
+>
+> ```java
+> @ExtendWith(MockitoExtension.class)
+> class UserServiceTest {
+>
+>   @Mock private UserRepository userRepository;
+>   @InjectMocks private UserService userService;
+>
+>   @Test
+>   void createUser_validInput_returnsUser() {
+>     var dto = new CreateUserDto("Alice", "alice@example.com");
+>     var expected = new User(1L, "Alice", "alice@example.com");
+>     when(userRepository.save(any(User.class))).thenReturn(expected);
+>
+>     var result = userService.create(dto);
+>
+>     assertThat(result.name()).isEqualTo("Alice");
+>     verify(userRepository).save(any(User.class));
+>   }
+>
+>   @Test
+>   void createUser_duplicateEmail_throwsException() {
+>     var dto = new CreateUserDto("Alice", "existing@example.com");
+>     when(userRepository.existsByEmail(dto.email())).thenReturn(true);
+>
+>     assertThatThrownBy(() -> userService.create(dto))
+>         .isInstanceOf(DuplicateEmailException.class);
+>   }
+> }
+> ```
+>
+> ### Integration Tests with Testcontainers
+>
+> Test against a real database instead of H2:
+>
+> ```java
+> @SpringBootTest
+> @Testcontainers
+> class UserRepositoryIntegrationTest {
+>
+>   @Container
+>   static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+>       .withDatabaseName("testdb");
+>
+>   @DynamicPropertySource
+>   static void configureProperties(DynamicPropertyRegistry registry) {
+>     registry.add("spring.datasource.url", postgres::getJdbcUrl);
+>     registry.add("spring.datasource.username", postgres::getUsername);
+>     registry.add("spring.datasource.password", postgres::getPassword);
+>   }
+>
+>   @Autowired private UserRepository userRepository;
+>
+>   @Test
+>   void findByEmail_existingUser_returnsUser() {
+>     userRepository.save(new User("Alice", "alice@example.com"));
+>
+>     var found = userRepository.findByEmail("alice@example.com");
+>
+>     assertThat(found).isPresent();
+>     assertThat(found.get().getName()).isEqualTo("Alice");
+>   }
+> }
+> ```
+>
+> ### API Tests with MockMvc
+>
+> Test controller layer with full Spring context:
+>
+> ```java
+> @WebMvcTest(UserController.class)
+> class UserControllerTest {
+>
+>   @Autowired private MockMvc mockMvc;
+>   @MockBean private UserService userService;
+>
+>   @Test
+>   void createUser_validInput_returns201() throws Exception {
+>     var user = new UserDto(1L, "Alice", "alice@example.com");
+>     when(userService.create(any())).thenReturn(user);
+>
+>     mockMvc.perform(post("/api/users")
+>             .contentType(MediaType.APPLICATION_JSON)
+>             .content("""
+>                 {"name": "Alice", "email": "alice@example.com"}
+>                 """))
+>         .andExpect(status().isCreated())
+>         .andExpect(jsonPath("$.name").value("Alice"));
+>   }
+>
+>   @Test
+>   void createUser_invalidEmail_returns400() throws Exception {
+>     mockMvc.perform(post("/api/users")
+>             .contentType(MediaType.APPLICATION_JSON)
+>             .content("""
+>                 {"name": "Alice", "email": "not-an-email"}
+>                 """))
+>         .andExpect(status().isBadRequest());
+>   }
+> }
+> ```
+>
+53c167,171
+< # Secrets (git)
+---
+> # Secrets in source
+> grep -rn "password\s*=\s*\"" src/ --include="*.java" --include="*.yml" --include="*.properties"
+> grep -rn "sk-\|api_key\|secret" src/ --include="*.java" --include="*.yml"
+>
+> # Secrets (git history)
+54a173,185
+> ```
+>
+> ### Common Security Findings
+>
+> ```
+> # Check for System.out.println (use logger instead)
+> grep -rn "System\.out\.print" src/main/ --include="*.java"
+>
+> # Check for raw exception messages in responses
+> grep -rn "e\.getMessage()" src/main/ --include="*.java"
+>
+> # Check for wildcard CORS
+> grep -rn "allowedOrigins.*\*" src/main/ --include="*.java"
+diff -r /tmp/everything-claude-code/skills/strategic-compact/SKILL.md /tmp/affaan-everything-claude-code/skills/strategic-compact/SKILL.md
+3a4
+> origin: ECC
+9a11,18
+> ## When to Activate
+>
+> - Running long sessions that approach context limits (200K+ tokens)
+> - Working on multi-phase tasks (research → plan → implement → test)
+> - Switching between unrelated tasks within the same session
+> - After completing a major milestone and starting new work
+> - When responses slow down or become less coherent (context pressure)
+>
+18,20c27,29
+< - **After exploration, before execution** - Compact research context, keep implementation plan
+< - **After completing a milestone** - Fresh start for next phase
+< - **Before major context shifts** - Clear exploration context before different task
+---
+> - **After exploration, before execution** — Compact research context, keep implementation plan
+> - **After completing a milestone** — Fresh start for next phase
+> - **Before major context shifts** — Clear exploration context before different task
+24c33
+< The `suggest-compact.sh` script runs on PreToolUse (Edit/Write) and:
+---
+> The `suggest-compact.js` script runs on PreToolUse (Edit/Write) and:
+26,28c35,37
+< 1. **Tracks tool calls** - Counts tool invocations in session
+< 2. **Threshold detection** - Suggests at configurable threshold (default: 50 calls)
+< 3. **Periodic reminders** - Reminds every 25 calls after threshold
+---
+> 1. **Tracks tool calls** — Counts tool invocations in session
+> 2. **Threshold detection** — Suggests at configurable threshold (default: 50 calls)
+> 3. **Periodic reminders** — Reminds every 25 calls after threshold
+37,43c46,55
+<     "PreToolUse": [{
+<       "matcher": "tool == \"Edit\" || tool == \"Write\"",
+<       "hooks": [{
+<         "type": "command",
+<         "command": "~/.claude/skills/strategic-compact/suggest-compact.sh"
+<       }]
+<     }]
+---
+>     "PreToolUse": [
+>       {
+>         "matcher": "Edit",
+>         "hooks": [{ "type": "command", "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js" }]
+>       },
+>       {
+>         "matcher": "Write",
+>         "hooks": [{ "type": "command", "command": "node ~/.claude/skills/strategic-compact/suggest-compact.js" }]
+>       }
+>     ]
+51c63,88
+< - `COMPACT_THRESHOLD` - Tool calls before first suggestion (default: 50)
+---
+> - `COMPACT_THRESHOLD` — Tool calls before first suggestion (default: 50)
+>
+> ## Compaction Decision Guide
+>
+> Use this table to decide when to compact:
+>
+> | Phase Transition | Compact? | Why |
+> |-----------------|----------|-----|
+> | Research → Planning | Yes | Research context is bulky; plan is the distilled output |
+> | Planning → Implementation | Yes | Plan is in TodoWrite or a file; free up context for code |
+> | Implementation → Testing | Maybe | Keep if tests reference recent code; compact if switching focus |
+> | Debugging → Next feature | Yes | Debug traces pollute context for unrelated work |
+> | Mid-implementation | No | Losing variable names, file paths, and partial state is costly |
+> | After a failed approach | Yes | Clear the dead-end reasoning before trying a new approach |
+>
+> ## What Survives Compaction
+>
+> Understanding what persists helps you compact with confidence:
+>
+> | Persists | Lost |
+> |----------|------|
+> | CLAUDE.md instructions | Intermediate reasoning and analysis |
+> | TodoWrite task list | File contents you previously read |
+> | Memory files (`~/.claude/memory/`) | Multi-step conversation context |
+> | Git state (commits, branches) | Tool call history and counts |
+> | Files on disk | Nuanced user preferences stated verbally |
+55,58c92,97
+< 1. **Compact after planning** - Once plan is finalized, compact to start fresh
+< 2. **Compact after debugging** - Clear error-resolution context before continuing
+< 3. **Don't compact mid-implementation** - Preserve context for related changes
+< 4. **Read the suggestion** - The hook tells you *when*, you decide *if*
+---
+> 1. **Compact after planning** — Once plan is finalized in TodoWrite, compact to start fresh
+> 2. **Compact after debugging** — Clear error-resolution context before continuing
+> 3. **Don't compact mid-implementation** — Preserve context for related changes
+> 4. **Read the suggestion** — The hook tells you *when*, you decide *if*
+> 5. **Write before compacting** — Save important context to files or memory before compacting
+> 6. **Use `/compact` with a summary** — Add a custom message: `/compact Focus on implementing auth middleware next`
+62,63c101,103
+< - [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) - Token optimization section
+< - Memory persistence hooks - For state that survives compaction
+---
+> - [The Longform Guide](https://x.com/affaanmustafa/status/2014040193557471352) — Token optimization section
+> - Memory persistence hooks — For state that survives compaction
+> - `continuous-learning` skill — Extracts patterns before session ends
+diff -r /tmp/everything-claude-code/skills/strategic-compact/suggest-compact.sh /tmp/affaan-everything-claude-code/skills/strategic-compact/suggest-compact.sh
+31c31,33
+< COUNTER_FILE="/tmp/claude-tool-count-$$"
+---
+> # Use CLAUDE_SESSION_ID for session-specific counter (not $$ which changes per invocation)
+> SESSION_ID="${CLAUDE_SESSION_ID:-${PPID:-default}}"
+> COUNTER_FILE="/tmp/claude-tool-count-${SESSION_ID}"
+diff -r /tmp/everything-claude-code/skills/tdd-workflow/SKILL.md /tmp/affaan-everything-claude-code/skills/tdd-workflow/SKILL.md
+3a4
+> origin: ECC
+diff -r /tmp/everything-claude-code/skills/verification-loop/SKILL.md /tmp/affaan-everything-claude-code/skills/verification-loop/SKILL.md
+0a1,6
+> ---
+> name: verification-loop
+> description: "A comprehensive verification system for Claude Code sessions."
+> origin: ECC
+> ---
+>
