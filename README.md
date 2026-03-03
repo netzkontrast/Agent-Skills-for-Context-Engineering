@@ -8,6 +8,14 @@ Context engineering is the discipline of managing the language model's context w
 
 The fundamental challenge is that context windows are constrained not by raw token capacity but by attention mechanics. As context length increases, models exhibit predictable degradation patterns: the "lost-in-the-middle" phenomenon, U-shaped attention curves, and attention scarcity. Effective context engineering means finding the smallest possible set of high-signal tokens that maximize the likelihood of desired outcomes.
 
+## Recognition
+
+This repository is cited in academic research as foundational work on static skill architecture:
+
+> "While static skills are well-recognized [Anthropic, 2025b; Muratcan Koylan, 2025], MCE is among the first to dynamically evolve them, bridging manual skill engineering and autonomous self-improvement."
+
+— [Meta Context Engineering via Agentic Skill Evolution](https://arxiv.org/pdf/2601.21557), Peking University State Key Laboratory of General Artificial Intelligence (2026)
+
 ## Skills Overview
 
 ### Foundational Skills
@@ -29,6 +37,8 @@ These skills cover the patterns and structures for building effective agent syst
 | [multi-agent-patterns](skills/multi-agent-patterns/) | Master orchestrator, peer-to-peer, and hierarchical multi-agent architectures |
 | [memory-systems](skills/memory-systems/) | Design short-term, long-term, and graph-based memory architectures |
 | [tool-design](skills/tool-design/) | Build tools that agents can use effectively |
+| [filesystem-context](skills/filesystem-context/) | Use filesystems for dynamic context discovery, tool output offloading, and plan persistence |
+| [hosted-agents](skills/hosted-agents/) | **NEW** Build background coding agents with sandboxed VMs, pre-built images, multiplayer support, and multi-client interfaces |
 
 ### Operational Skills
 
@@ -46,7 +56,15 @@ These skills cover the meta-level practices for building LLM-powered projects.
 
 | Skill | Description |
 |-------|-------------|
-| [project-development](skills/project-development/) | **NEW** Design and build LLM projects from ideation through deployment, including task-model fit analysis, pipeline architecture, and structured output design |
+| [project-development](skills/project-development/) | Design and build LLM projects from ideation through deployment, including task-model fit analysis, pipeline architecture, and structured output design |
+
+### Cognitive Architecture Skills
+
+These skills cover formal cognitive modeling for rational agent systems.
+
+| Skill | Description |
+|-------|-------------|
+| [bdi-mental-states](skills/bdi-mental-states/) | **NEW** Transform external RDF context into agent mental states (beliefs, desires, intentions) using formal BDI ontology patterns for deliberative reasoning and explainability |
 
 ## Design Philosophy
 
@@ -93,6 +111,7 @@ Option B - Direct install via command:
 /plugin install agent-architecture@context-engineering-marketplace
 /plugin install agent-evaluation@context-engineering-marketplace
 /plugin install agent-development@context-engineering-marketplace
+/plugin install cognitive-architecture@context-engineering-marketplace
 ```
 
 ### Available Plugins
@@ -100,9 +119,10 @@ Option B - Direct install via command:
 | Plugin | Skills Included |
 |--------|-----------------|
 | `context-engineering-fundamentals` | context-fundamentals, context-degradation, context-compression, context-optimization |
-| `agent-architecture` | multi-agent-patterns, memory-systems, tool-design |
+| `agent-architecture` | multi-agent-patterns, memory-systems, tool-design, filesystem-context, hosted-agents |
 | `agent-evaluation` | evaluation, advanced-evaluation |
 | `agent-development` | project-development |
+| `cognitive-architecture` | bdi-mental-states |
 
 ### Skill Triggers
 
@@ -115,9 +135,12 @@ Option B - Direct install via command:
 | `multi-agent-patterns` | "design multi-agent system", "implement supervisor pattern" |
 | `memory-systems` | "implement agent memory", "build knowledge graph", "track entities" |
 | `tool-design` | "design agent tools", "reduce tool complexity", "implement MCP tools" |
+| `filesystem-context` | "offload context to files", "dynamic context discovery", "agent scratch pad", "file-based context" |
+| `hosted-agents` | "build background agent", "create hosted coding agent", "sandboxed execution", "multiplayer agent", "Modal sandboxes" |
 | `evaluation` | "evaluate agent performance", "build test framework", "measure quality" |
 | `advanced-evaluation` | "implement LLM-as-judge", "compare model outputs", "mitigate bias" |
 | `project-development` | "start LLM project", "design batch pipeline", "evaluate task-model fit" |
+| `bdi-mental-states` | "model agent mental states", "implement BDI architecture", "transform RDF to beliefs", "build cognitive agent" |
 
 <img width="1014" height="894" alt="Screenshot 2025-12-26 at 12 34 47 PM" src="https://github.com/user-attachments/assets/f79aaf03-fd2d-4c71-a630-7027adeb9bfe" />
 
@@ -177,7 +200,7 @@ The [book-sft-pipeline](examples/book-sft-pipeline/) example demonstrates traini
 Integrates with context engineering skills: project-development, context-compression, multi-agent-patterns, evaluation.
 
 ## Star History
-<img width="1832" height="1324" alt="star-history-20251229" src="https://github.com/user-attachments/assets/153f691a-12db-4fb9-8960-53bc431b202a" />
+<img width="3664" height="2648" alt="star-history-2026224" src="https://github.com/user-attachments/assets/b3bdbf23-4b6a-4774-ae85-42ef4d9b2d79" />
 
 ## Structure
 
@@ -203,8 +226,6 @@ This repository follows the Agent Skills open development model. Contributions a
 5. Keep SKILL.md under 500 lines for optimal performance
 
 Feel free to contact [Muratcan Koylan](https://x.com/koylanai) for collaboration opportunities or any inquiries.
-
-[![Sponsor via GitHub](https://img.shields.io/badge/Sponsor-muratcankoylan-pink?logo=github-sponsors&style=for-the-badge)](https://github.com/sponsors/muratcankoylan)
 
 ## License
 
