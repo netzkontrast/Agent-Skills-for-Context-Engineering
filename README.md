@@ -37,6 +37,14 @@ Context engineering is the discipline of managing the language model's context w
 
 The fundamental challenge is that context windows are constrained not by raw token capacity but by attention mechanics. As context length increases, models exhibit predictable degradation patterns: the "lost-in-the-middle" phenomenon, U-shaped attention curves, and attention scarcity. Effective context engineering means finding the smallest possible set of high-signal tokens that maximize the likelihood of desired outcomes.
 
+## Recognition
+
+This repository is cited in academic research as foundational work on static skill architecture:
+
+> "While static skills are well-recognized [Anthropic, 2025b; Muratcan Koylan, 2025], MCE is among the first to dynamically evolve them, bridging manual skill engineering and autonomous self-improvement."
+
+— [Meta Context Engineering via Agentic Skill Evolution](https://arxiv.org/pdf/2601.21557), Peking University State Key Laboratory of General Artificial Intelligence (2026)
+
 ## Skills Overview
 
 ### Tier 1 — Workflow Execution (New in v2.0)
@@ -90,6 +98,14 @@ The operational backbone: an L0–L3 agent hierarchy implementing the Universal 
 | Skill | Description |
 |-------|-------------|
 | [project-development](skills/project-development/) | Task-model fit analysis, staged pipeline architecture, structured output design |
+
+**Cognitive Architecture:**
+
+| Skill | Description |
+|-------|-------------|
+| [bdi-mental-states](skills/bdi-mental-states/) | Transform RDF context into BDI mental states (beliefs, desires, intentions) for deliberative reasoning |
+| [filesystem-context](skills/filesystem-context/) | Dynamic context discovery via filesystem, tool output offloading, plan persistence |
+| [hosted-agents](skills/hosted-agents/) | Background coding agents: sandboxed VMs, pre-built images, multiplayer support |
 
 ## Design Philosophy
 
@@ -188,9 +204,12 @@ npx ai-workflow-skills --all --local
 | `multi-agent-patterns` | "design multi-agent system", "implement supervisor pattern" |
 | `memory-systems` | "implement agent memory", "build knowledge graph", "track entities" |
 | `tool-design` | "design agent tools", "reduce tool complexity", "implement MCP tools" |
+| `filesystem-context` | "offload context to files", "dynamic context discovery", "agent scratch pad", "file-based context" |
+| `hosted-agents` | "build background agent", "create hosted coding agent", "sandboxed execution", "multiplayer agent", "Modal sandboxes" |
 | `evaluation` | "evaluate agent performance", "build test framework", "measure quality" |
 | `advanced-evaluation` | "implement LLM-as-judge", "compare model outputs", "mitigate bias" |
 | `project-development` | "start LLM project", "design batch pipeline", "evaluate task-model fit" |
+| `bdi-mental-states` | "model agent mental states", "implement BDI architecture", "transform RDF to beliefs", "build cognitive agent" |
 
 <img width="1014" height="894" alt="Screenshot 2025-12-26 at 12 34 47 PM" src="https://github.com/user-attachments/assets/f79aaf03-fd2d-4c71-a630-7027adeb9bfe" />
 ## Examples
@@ -241,7 +260,7 @@ The [book-sft-pipeline](examples/book-sft-pipeline/) example demonstrates traini
 Integrates with context engineering skills: project-development, context-compression, multi-agent-patterns, evaluation.
 
 ## Star History
-<img width="1832" height="1324" alt="star-history-20251229" src="https://github.com/user-attachments/assets/153f691a-12db-4fb9-8960-53bc431b202a" />
+<img width="3664" height="2648" alt="star-history-2026224" src="https://github.com/user-attachments/assets/b3bdbf23-4b6a-4774-ae85-42ef4d9b2d79" />
 
 ## Structure
 
@@ -301,8 +320,6 @@ This repository follows the Agent Skills open development model. Contributions a
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full v2.0 skill authoring requirements.
 
 Feel free to contact [Muratcan Koylan](https://x.com/koylanai) for collaboration opportunities or any inquiries.
-
-[![Sponsor via GitHub](https://img.shields.io/badge/Sponsor-muratcankoylan-pink?logo=github-sponsors&style=for-the-badge)](https://github.com/sponsors/muratcankoylan)
 
 ## License
 
