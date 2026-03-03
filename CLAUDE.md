@@ -22,3 +22,6 @@
 ## Contributing
 
 Use `template/SKILL.md`. Required fields: `allowed-tools` in frontmatter, `## Workflow Compliance` section, `**Level**:` in Skill Metadata. See `CONTRIBUTING.md` for v2.0 requirements.
+
+
+*Note: For comprehensive documentation on the system architecture and workflow, please refer to [docs/architecture_and_usage.md](docs/architecture_and_usage.md).*

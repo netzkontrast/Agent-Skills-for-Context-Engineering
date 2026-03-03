@@ -6,7 +6,7 @@ After analyzing the newly integrated skills from the `everything-claude-code` re
 * **`continuous-learning-v2` / `continuous-learning`**
   * *Why:* Extracting patterns directly from previous sessions natively powers "Agent Skills" and improves iterative engineering. By creating a workflow around observer agents and learning hooks, context isn't lost between sessions.
 * **`verification-loop` / `eval-harness`**
-  * *Why:* Setting up commands that automatically initiate the verification loop for newly authored code ensures robustness without explicit manual triggering.
+  * *Why:* Setting up commands that automatically initiate the verification loop for newly authored code provides safety without explicit manual triggering.
 * **`strategic-compact`**
   * *Why:* Excellent for managing multi-session context. Integrating a script that auto-generates or reads `compact.md` during session start/stop commands can save heavy context engineering overhead.
 * **`iterative-retrieval`**
@@ -29,3 +29,6 @@ After analyzing the newly integrated skills from the `everything-claude-code` re
 ## 4. Documentation and Content
 * **`article-writing` / `content-engine`**
   * *Why:* For repositories handling documentation, hooking these skills to a command like `generate-docs` can transform raw implementation details into polished, user-facing documentation or internal readmes.
+
+
+*Note: For comprehensive documentation on the system architecture and workflow, please refer to [docs/architecture_and_usage.md](docs/architecture_and_usage.md).*

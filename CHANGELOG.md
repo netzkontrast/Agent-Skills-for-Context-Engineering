@@ -84,3 +84,6 @@ Updated files: `marketplace.json` (v2.0.0, 6 plugin groups covering all 18 skill
 
 **Advanced Skills:**
 - `advanced-evaluation` — Pairwise comparison, position bias mitigation, production evaluation
+
+
+*Note: For comprehensive documentation on the system architecture and workflow, please refer to [docs/architecture_and_usage.md](docs/architecture_and_usage.md).*
